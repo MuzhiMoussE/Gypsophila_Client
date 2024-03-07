@@ -16,10 +16,10 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public Slider recordSlider;
     public Slider recordingTimeSlider;
     public float recordingTime = 5f;//记录存取时间
+    [SerializeField]private GameObject sketchman;
 
-
-    [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float jumpForce = 10f;
+    public float moveSpeed = 3f;
+    public float jumpForce = 10f;
     private float timer = 0f;
     private float intervalTime = 0.5f;//大于这个时间判定为长按
     private float recordTime = 1f;//按满1s触发长按事件
@@ -133,8 +133,10 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public void Releasing()
     {
         playerState = Global.PlayerState.Releasing;
-        SketchSystem.Instance.ReleasingAction();
         Debug.Log("释放！");
+        
+        SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
+        SketchSystem.Instance.ReleasingAction();
         isRecorded = false;
         playerState = Global.PlayerState.Idle;
     }

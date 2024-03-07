@@ -46,7 +46,7 @@ public class Global
 
         override public string ToString()
         {
-            return action.ToString()+"Start:"+startTime+"  End:"+endTime;
+            return action.ToString()+" Start:"+startTime+"  End:"+endTime;
         }
     }
 

@@ -16,7 +16,6 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public Slider recordSlider;
     public Slider recordingTimeSlider;
     public float recordingTime = 5f;//记录存取时间
-    [SerializeField]private GameObject sketchman;
 
     public float moveSpeed = 3f;
     public float jumpForce = 10f;
@@ -133,10 +132,9 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public void Releasing()
     {
         playerState = Global.PlayerState.Releasing;
-        Debug.Log("释放！");
-        
-        SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
+        //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
         SketchSystem.Instance.ReleasingAction();
+        //释放纸人实体
         isRecorded = false;
         playerState = Global.PlayerState.Idle;
     }

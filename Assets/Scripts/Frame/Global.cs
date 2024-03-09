@@ -28,20 +28,20 @@ public class Global
         public InputAction action;
         public float startTime;
         public float endTime;
-        public bool startReleased;
+        //public bool startReleased;
         public ActionPair()
         {
             action = InputAction.NONE;
             startTime = 0;
             endTime = 0;
-            startReleased = false;
+            //startReleased = false;
         }
         public ActionPair(InputAction action, float startTime, float endTime)
         {
             this.action = action;
             this.startTime = startTime;
             this.endTime = endTime;
-            startReleased  = false;
+            //startReleased = false;
         }
 
         override public string ToString()

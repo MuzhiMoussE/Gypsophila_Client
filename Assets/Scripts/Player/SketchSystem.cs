@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using Utility;
 using UnityEngine.SceneManagement;
 using static UnityEditorInternal.VersionControl.ListControl;
+using System;
+using Unity.VisualScripting;
 
 public class SketchSystem:SingletonMonoBase<SketchSystem>
 {
@@ -36,13 +38,18 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
     private List<KeyPair> movingLeft = new List<KeyPair>();
     private List<KeyPair> movingRight = new List<KeyPair>();
     private List<KeyPair> jumping = new List<KeyPair>() ;
-    public List<ActionPair> actionPairs = new List<ActionPair>();
+    private List<ActionPair> actionPairs = new List<ActionPair>();
+    public Queue<ActionPair> actionQueue = new Queue<ActionPair>();
     private int index_l = 0;
     private int index_r = 0;
     private int index_j = 0;
     private int direction = 0;
     private bool startRecording = false;
     private float time0 = 0;
+    private float _time0 = 0;
+    private bool startReleased = false;
+    private bool canRelease = false;
+
     private void Update()
     {
         RecordingAction();
@@ -59,7 +66,12 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
     }
     public void ReleasingAction()
     {
-        actionPairs.Clear();
+        canRelease = true;
+        foreach(var pair in actionQueue)
+        {
+            Debug.Log("RECORDED "+pair.ToString());
+        }
+        //Debug.Log(actionQueue.Count+" actions recorded!");
     }
     private void RecordingAction()
     {
@@ -133,42 +145,70 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
             }
         }
         QuickSortByStartTime(actionPairs,0,actionPairs.Count-1);
-        
-    }
-    public void CopyActionToSkecthMan(GameObject sketchman)
-    {
-        if (sketchman == null) return;
-        float _timer = 0f;
-        int index = 0;
-        
-        //应该协程来做，达到条件返回的思路
-        while(_timer<StateSystem.Instance.recordingTime)
+        for(int i=0;i<actionPairs.Count-1;i++)
         {
-            if(index>=actionPairs.Count) { break; }
-            if (_timer - actionPairs[index].startTime < 0.01f)//某动作的开启时间，一定是顺序的
-            {
-                StartAction(sketchman, actionPairs[index]);
-                index++;
-            }
-            sketchman.transform.position += new Vector3(direction * Time.deltaTime*StateSystem.Instance.moveSpeed,0,0);
-            _timer += Time.deltaTime;
+            //上一次的抬起晚于下一次的按下，让上一次的抬起时间略小于下一次的按下时间
+            if (actionPairs[i].endTime > actionPairs[i + 1].startTime)
+                actionPairs[i].endTime -= (actionPairs[i].endTime - actionPairs[i + 1].startTime)*2;
+            
         }
+        foreach(var pair in actionPairs)
+        {
+            actionQueue.Enqueue(pair);
+        }
+        actionPairs.Clear();
+        movingLeft.Clear();
+        movingRight.Clear();
+        jumping.Clear();
+        index_l = 0;
+        index_r = 0;
+        index_j = 0;
+}
+    public void CopyActionToSkecthMan(GameObject sketchman)//update中使用
+    {
+        if (!canRelease) return;
+        else
+        {
+            sketchman.transform.position += new Vector3(direction * Time.fixedDeltaTime * StateSystem.Instance.moveSpeed, 0, 0);
+            //Debug.Log("释放！");
+            if (!startReleased)
+            {
+                startReleased = true;
+                _time0 = Time.time;
+            }
+            else
+            {
+                if (actionQueue.Count>0 && Math.Abs(Time.time - _time0) > actionQueue.Peek().startTime)
+                {
+                    ActionPair temp = actionQueue.Dequeue();
+                    StartAction(sketchman, temp);
+                }
+                    
+            }   
+        }   
     }
+    //用Queue先进先出！！！！！！！！！！！！！！！
     IEnumerator stopAction(ActionPair action)
     {
-        yield return  new WaitForSeconds(action.endTime);
+        yield return  new WaitForSeconds(action.endTime-action.startTime);
         direction = 0;
-        Debug.Log("OVER "+action.ToString());
+        Debug.Log("OVER " + action.ToString()+" TIME "+Time.time);
+        if(actionQueue.Count == 0)
+        {
+            canRelease = false;
+            startReleased = false;
+            _time0 = 0;
+        }
+
     }
     private void StartAction(GameObject sketchman,ActionPair action)
     {
-        Debug.Log("START "+action.ToString());
+        Debug.Log("START " + action.ToString() + " TIME " + Time.time);
         //这里使用协程
-        if(action.action == InputAction.JUMPING)
+        if (action.action == InputAction.JUMPING)
         {
             //跳跃
-            sketchman.GetComponent<Rigidbody>().AddForce(new Vector3(0,StateSystem.Instance.jumpForce,0));
-            
+            sketchman.GetComponent<Rigidbody>().AddForce(new Vector3(0, StateSystem.Instance.jumpForce, 0));
         }
         else
         {
@@ -178,6 +218,7 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
             IEnumerator e = stopAction(action);
             StartCoroutine(e);
         }
+
     }
     private void QuickSortByStartTime(List<ActionPair> list,int low,int high)
     {

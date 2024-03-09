@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: stone1
+  m_Name: land1
   m_Shader: {fileID: 4800000, guid: b6db697ca1e99fc4c91dbb5ec91a3531, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -58,7 +58,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _OutlineNoiseFB:
         m_Texture: {fileID: 2800000, guid: 14b157b1a1c520042ba75755e6b140c9, type: 3}
-        m_Scale: {x: 0.58, y: 1}
+        m_Scale: {x: 0.39, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
@@ -75,9 +75,9 @@ Material:
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
-    - _NoiseSize: 6.8
+    - _NoiseSize: 14.5
     - _OcclusionStrength: 1
-    - _OutlineWidth0: 16.2
+    - _OutlineWidth0: 5.2
     - _OutlineWidth1: 0
     - _Parallax: 0.02
     - _RimRate: 5
@@ -87,9 +87,9 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.5377358, g: 0.5377358, b: 0.4180135, a: 1}
+    - _Color: {r: 0.6886792, g: 0.38791263, b: 0.36642933, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _InlineControl: {r: 1.16, g: 1.42, b: 1, a: 0.87}
+    - _InlineControl: {r: 1.6, g: 2.81, b: 1, a: 0}
     - _OutlineColor: {r: 0.05, g: 0.05, b: 0.05, a: 1}
     - _OutlineNoiseCtrl: {r: 1.67, g: 3.5, b: 9, a: 5}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}

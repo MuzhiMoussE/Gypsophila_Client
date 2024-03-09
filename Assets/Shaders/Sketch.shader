@@ -6,6 +6,7 @@ Shader "MyShader/PaperWithSketch"
         _NoiseSize("Noise Size", Range(0.001,20)) = 1
 
         _RimColor("Rim Color", Color) = (0,1,1,1)
+		_Color("Color",Color) = (0,1,1,1)
         _RimRate("Rim Rate", Range(0,5)) = 1
 
         _InlineControl("Inline Ctrl{range, step, noiseSize, noise cutoff}", Vector) = (0.1,0.5,1,0.5)
@@ -53,6 +54,7 @@ Shader "MyShader/PaperWithSketch"
                 float4 _InlineControl;
                 float4 _OutlineColor;
                 float4 _RimColor;
+				float4 _Color;
                 float _RimRate;
                 sampler2D _Noise;
                 float _NoiseSize;
@@ -89,7 +91,7 @@ Shader "MyShader/PaperWithSketch"
                     float b = clamp(1 - a, 0, 1);
 
                     col.rgb = lerp(_OutlineColor, col, step((i.rimLight - b) / a + noise * _InlineControl.w, _InlineControl.y));
-
+					col.rgb = col*_Color;
                     // apply fog
                     UNITY_APPLY_FOG(i.fogCoord, col);
                     return col;

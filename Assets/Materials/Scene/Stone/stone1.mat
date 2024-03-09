@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 3D Noise map
-  m_Shader: {fileID: 4800000, guid: 5c6b0f11e22ed174c9ca37e12f3e0aa8, type: 3}
+  m_Name: stone1
+  m_Shader: {fileID: 4800000, guid: b6db697ca1e99fc4c91dbb5ec91a3531, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -41,11 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 14b157b1a1c520042ba75755e6b140c9, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MatCap:
-        m_Texture: {fileID: 2800000, guid: 94729d0bfaa76c341ac51c08df4fe7a3, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -53,31 +49,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Noise:
-        m_Texture: {fileID: 2800000, guid: acc6d25c6a6313b4e8d02b8fd5f0fd38, type: 3}
+        m_Texture: {fileID: 2800000, guid: 13ccc04d903ef144381b68cd75741ab2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _OutlineNoiseFB:
+        m_Texture: {fileID: 2800000, guid: 14b157b1a1c520042ba75755e6b140c9, type: 3}
+        m_Scale: {x: 0.58, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TexDown:
-        m_Texture: {fileID: 2800000, guid: 56067abd1005834448831d412d144ff2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TexForward:
-        m_Texture: {fileID: 2800000, guid: bf36df70140c64b41aedc40cf566a130, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TexSide:
-        m_Texture: {fileID: 2800000, guid: 355ce47029b54a341a804138b820e987, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TexTop:
-        m_Texture: {fileID: 2800000, guid: faed166bd61145a4dac17b9dc015ee7b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -91,11 +75,12 @@ Material:
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
-    - _NoiseSize: 8.4
+    - _NoiseSize: 2.2
     - _OcclusionStrength: 1
-    - _OutlineWidth: 5
+    - _OutlineWidth0: 16.2
+    - _OutlineWidth1: 0
     - _Parallax: 0.02
-    - _RimRate: 1
+    - _RimRate: 5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -104,7 +89,8 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 0, g: 1, b: 1, a: 1}
-    - _Size: {r: 1, g: 1, b: 1, a: 1}
+    - _InlineControl: {r: 1.16, g: 1.42, b: 1, a: 0.87}
+    - _OutlineColor: {r: 0.05, g: 0.05, b: 0.05, a: 1}
+    - _OutlineNoiseCtrl: {r: 1.67, g: 3.5, b: 9, a: 5}
+    - _RimColor: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
   m_BuildTextureStacks: []

@@ -16,7 +16,8 @@ public class Global
         Releasing,
         Recording,
         Interacting,
-        Dragging
+        Dragging,
+        Die
     }
     public enum InputAction
     {
@@ -58,6 +59,7 @@ public class Global
         public static string LEVEL_SWITCH = "LevelSwitch";
         public static string SIGHT_SWITCH = "SightSwitch";
         public static string UNTAGGED = "Untagged";
+        public static string SKETCH_MAN = "SketchMan";
     }
 
 }

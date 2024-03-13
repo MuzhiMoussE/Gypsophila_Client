@@ -12,12 +12,16 @@ using Utility;
 public class StateSystem : SingletonMonoBase<StateSystem>
 {
     public Global.PlayerState playerState = Global.PlayerState.Idle;
-    public Global.PlayerState lastState = Global.PlayerState.Idle;
     public Slider recordSlider;
     public Slider recordingTimeSlider;
     public float recordingTime = 5f;//记录存取时间
-    public float moveSpeed = 3f;
-    public float jumpForce = 30f;
+    public float moveSpeed;
+    public float jumpForce;
+    private float jumpMaxTime = 0.2f;
+    private float jumpTime = 0;
+    private bool canJump = true;
+    public bool onGround = true;
+
     public float sketchmanDistance = 5.0f;
 
     private float timer = 0f;
@@ -40,57 +44,13 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         //短按释放，长按记录动作
         else if (Input.GetKey(KeyCode.E))
         {
-            timer += Time.deltaTime;
-            //此处只检测长按逻辑
-            if (timer >= intervalTime)//超过间隔时间也就是长按
-            {
-                longPress = true;
-                if (timer >= recordTime && !isRecorded)//开启记录
-                {
-                    Recording();
-                }
-                else//未开启，进度条++
-                {
-                    recordSlider.value = timer / recordTime;
-                }
-            }
+            LongOrShortPressFunction();
         }
         else if(Input.GetKeyUp(KeyCode.E))//利用按键抬手判断是不是短按
         {
             if(!longPress)
             {
-                if (timer < intervalTime)
-                {
-                    timer = 0f;//复位
-                    recordSlider.value = 0;
-                    if (interactTrigger)
-                    {
-                        if(interactObject.tag == Global.ItemTag.BOX && !getBox)
-                        {
-                            getBox = true;
-                            Debug.Log("GET BOX!");
-                            interactObject.gameObject.GetComponent<Boxes>().dragged = true;
-                        }
-                        else if(interactObject.tag == Global.ItemTag.BOX && getBox)
-                        {
-                            getBox = false;
-                            Debug.Log("THROW BOX!");
-                            interactObject.gameObject.GetComponent<Boxes>().dragged = false;
-                        }
-                    }
-                    else if (isRecorded)
-                    {
-                        Releasing(sketchman);
-                        sketchman.transform.position = player.transform.position + new Vector3(sketchmanDistance, 0, 0) * direction;
-                        sketchman.SetActive(true);
-                    }
-                    else
-                    {
-                        Debug.Log("无记录！");
-                    }
-                    playerState = Global.PlayerState.Idle;
-
-                }
+                ShortPressFunction(sketchman, player);
             }
             else if(timer < recordTime)
             {
@@ -105,35 +65,9 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             ToSummon();
         }
         //跳跃
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            playerState = Global.PlayerState.Jumping;
-            player_rd.AddForce(new Vector3(0,jumpForce,0));
-            playerState = lastState;
-        }
+        JumpFunction(player);
         //移动
-        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-
-            direction = -1;
-            playerState = Global.PlayerState.Moving;
-            player.transform.position -= new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
-            lastState = playerState;
-            PlayerRotate(player);
-        }
-        else if(Input.GetKey(KeyCode.D)  || Input.GetKey(KeyCode.RightArrow))
-        {
-            direction = 1;
-            playerState = Global.PlayerState.Moving;
-            player.transform.position += new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
-            lastState = playerState;
-            PlayerRotate(player);
-        }
-        else
-        {
-            playerState = Global.PlayerState.Idle;
-            lastState = playerState;
-        }
+        MoveFunction(player);
 
     }
     private void PlayerRotate(GameObject player)
@@ -198,5 +132,129 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         interactTrigger = false; 
         interactObject = null;
     }
+    private void LongOrShortPressFunction()
+    {
+        timer += Time.deltaTime;
+        //此处只检测长按逻辑
+        if (timer >= intervalTime)//超过间隔时间也就是长按
+        {
+            longPress = true;
+            if (timer >= recordTime && !isRecorded)//开启记录
+            {
+                Recording();
+            }
+            else//未开启，进度条++
+            {
+                recordSlider.value = timer / recordTime;
+            }
+        }
+    }
+    private void InteractFunction()
+    {
+        if (interactObject.tag == Global.ItemTag.BOX && !getBox)
+        {
+            getBox = true;
+            Debug.Log("GET BOX!");
+            interactObject.gameObject.GetComponent<Boxes>().dragged = true;
+            canJump = false;
+            
+        }
+        else if (interactObject.tag == Global.ItemTag.BOX && getBox)
+        {
+            getBox = false;
+            Debug.Log("THROW BOX!");
+            interactObject.gameObject.GetComponent<Boxes>().dragged = false;
+            Instance.playerState = Global.PlayerState.Idle;
+            canJump = true;
+        }
+    }
+    private void ReleaseFunction(GameObject sketchman,GameObject player)
+    {
+        Releasing(sketchman);
+        sketchman.transform.position = player.transform.position + new Vector3(sketchmanDistance, 0, 0) * direction;
+        sketchman.SetActive(true);
+    }
+    private void ShortPressFunction(GameObject sketchman,GameObject player)
+    {
+        if (timer < intervalTime)
+        {
+            timer = 0f;//复位
+            recordSlider.value = 0;
+            if (interactTrigger) InteractFunction();
+            else if (isRecorded) ReleaseFunction(sketchman, player);
+            else
+            {
+                //Debug.Log("无记录！");
+            }
+            playerState = Global.PlayerState.Idle;
+        }
+    }
+    private void MoveLeftFunction(GameObject player)
+    {
+        direction = -1;
+        playerState = Global.PlayerState.Moving;
+        player.transform.position -= new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
+        PlayerRotate(player);
+    }
+    private void MoveRightFunction(GameObject player)
+    {
+        direction = 1;
+        playerState = Global.PlayerState.Moving;
+        player.transform.position += new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
+        PlayerRotate(player);
+    }
+    private void JumpFunction(GameObject player)
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            
+            if (jumpTime < jumpMaxTime && canJump)
+            {
+                playerState = Global.PlayerState.Jumping;
+                player.transform.position += new Vector3(0, jumpForce * Time.deltaTime, 0);
+                jumpTime += Time.deltaTime;
+            }
+            else
+            {
+                jumpTime = 0;
+                canJump = false;
 
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpTime = 0;
+            
+            if (onGround && !getBox)
+            {
+                canJump = true;
+                playerState = Global.PlayerState.Jumping;
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (!onGround)
+            {
+                canJump = false;
+                //playerState = Global.PlayerState.Jumping;
+            }
+        }
+    }
+    private void MoveFunction(GameObject player)
+    {
+
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            MoveLeftFunction(player);
+            if (!onGround) playerState = Global.PlayerState.Jumping;
+            if(getBox) playerState = Global.PlayerState.Dragging;
+        }
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            MoveRightFunction(player);
+            
+            if (!onGround) playerState = Global.PlayerState.Jumping;
+            if (getBox) playerState = Global.PlayerState.Dragging;
+        }
+    }
 }

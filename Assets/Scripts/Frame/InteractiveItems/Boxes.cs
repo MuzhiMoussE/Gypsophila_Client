@@ -24,6 +24,7 @@ public class Boxes : MonoBehaviour
         if(dragged)
         {
             this.gameObject.transform.SetParent(player.transform);
+            StateSystem.Instance.playerState = Global.PlayerState.Dragging;
             Debug.Log("GET!!!");
             return;
         }

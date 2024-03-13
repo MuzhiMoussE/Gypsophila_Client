@@ -64,13 +64,18 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
         startRecording = false;
         StoreAction();
     }
-    public void ReleasingAction()
+    public void ReleasingAction(GameObject sketchman)
     {
         canRelease = true;
-        foreach(var pair in actionQueue)
+        if(actionQueue.Count == 0)//什么都没有记录
         {
-            Debug.Log("RECORDED "+pair.ToString());
+            IEnumerator e = noneAction(sketchman);
+            StartCoroutine(e);
         }
+        //foreach(var pair in actionQueue)
+        //{
+        //    Debug.Log("RECORDED "+pair.ToString());
+        //}
         //Debug.Log(actionQueue.Count+" actions recorded!");
     }
     private void RecordingAction()
@@ -175,6 +180,7 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
             {
                 startReleased = true;
                 _time0 = Time.time;
+                
             }
             else
             {
@@ -188,22 +194,28 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
         }   
     }
     //用Queue先进先出！！！！！！！！！！！！！！！
-    IEnumerator stopAction(ActionPair action)
+    IEnumerator noneAction(GameObject sketchman)
+    {
+        yield return new WaitForSeconds(StateSystem.Instance.recordingTime);
+        sketchman.SetActive(false);
+    }
+    IEnumerator stopAction(ActionPair action,GameObject sketchman)
     {
         yield return  new WaitForSeconds(action.endTime-action.startTime);
         direction = 0;
-        Debug.Log("OVER " + action.ToString()+" TIME "+Time.time);
+        //Debug.Log("OVER " + action.ToString()+" TIME "+Time.time);
         if(actionQueue.Count == 0)
         {
             canRelease = false;
             startReleased = false;
             _time0 = 0;
+            sketchman.SetActive(false);
         }
 
     }
     private void StartAction(GameObject sketchman,ActionPair action)
     {
-        Debug.Log("START " + action.ToString() + " TIME " + Time.time);
+        //Debug.Log("START " + action.ToString() + " TIME " + Time.time);
         //这里使用协程
         if (action.action == InputAction.JUMPING)
         {
@@ -215,7 +227,7 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
             if (action.action == InputAction.MOVING_LEFT) direction = -1;
             else if (action.action == InputAction.MOVING_RIGHT) direction = 1;
             //何时停止，将direction置0，使用协程
-            IEnumerator e = stopAction(action);
+            IEnumerator e = stopAction(action,sketchman);
             StartCoroutine(e);
         }
 

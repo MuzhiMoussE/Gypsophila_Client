@@ -14,7 +14,9 @@ public class Global
         ToSummon,
         Summoning,
         Releasing,
-        Recording
+        Recording,
+        Interacting,
+        Dragging
     }
     public enum InputAction
     {
@@ -48,6 +50,14 @@ public class Global
         {
             return action.ToString()+" Start:"+startTime+"  End:"+endTime;
         }
+    }
+    public static class ItemTag
+    {
+        public static string PLAYER = "Player";
+        public static string BOX = "Box";
+        public static string LEVEL_SWITCH = "LevelSwitch";
+        public static string SIGHT_SWITCH = "SightSwitch";
+        public static string UNTAGGED = "Untagged";
     }
 
 }

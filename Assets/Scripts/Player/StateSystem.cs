@@ -16,16 +16,20 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public Slider recordSlider;
     public Slider recordingTimeSlider;
     public float recordingTime = 5f;//记录存取时间
-
     public float moveSpeed = 3f;
-    public float jumpForce = 10f;
+    public float jumpForce = 30f;
+    public float sketchmanDistance = 5.0f;
+
     private float timer = 0f;
     private float intervalTime = 0.5f;//大于这个时间判定为长按
     private float recordTime = 1f;//按满1s触发长按事件
     private bool isRecorded = false;
     private bool longPress = false;
-
-    public void InputListener(GameObject player,Rigidbody player_rd)
+    private int direction = 0;
+    private bool interactTrigger = false;
+    [SerializeField]private GameObject interactObject = null;
+    private bool getBox = false;
+    public void InputListener(GameObject player,Rigidbody player_rd,GameObject sketchman)
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
@@ -55,20 +59,37 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         {
             if(!longPress)
             {
-                
                 if (timer < intervalTime)
                 {
                     timer = 0f;//复位
                     recordSlider.value = 0;
-                    if(isRecorded)
+                    if (interactTrigger)
                     {
-                        Releasing();
+                        if(interactObject.tag == Global.ItemTag.BOX && !getBox)
+                        {
+                            getBox = true;
+                            Debug.Log("GET BOX!");
+                            interactObject.gameObject.GetComponent<Boxes>().dragged = true;
+                        }
+                        else if(interactObject.tag == Global.ItemTag.BOX && getBox)
+                        {
+                            getBox = false;
+                            Debug.Log("THROW BOX!");
+                            interactObject.gameObject.GetComponent<Boxes>().dragged = false;
+                        }
+                    }
+                    else if (isRecorded)
+                    {
+                        Releasing(sketchman);
+                        sketchman.transform.position = player.transform.position + new Vector3(sketchmanDistance, 0, 0) * direction;
+                        sketchman.SetActive(true);
                     }
                     else
                     {
                         Debug.Log("无记录！");
                     }
                     playerState = Global.PlayerState.Idle;
+
                 }
             }
             else if(timer < recordTime)
@@ -84,26 +105,29 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             ToSummon();
         }
         //跳跃
-        if(Input.GetKey(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             playerState = Global.PlayerState.Jumping;
             player_rd.AddForce(new Vector3(0,jumpForce,0));
-
             playerState = lastState;
         }
         //移动
         else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
+
+            direction = -1;
             playerState = Global.PlayerState.Moving;
             player.transform.position -= new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
             lastState = playerState;
+            PlayerRotate(player);
         }
         else if(Input.GetKey(KeyCode.D)  || Input.GetKey(KeyCode.RightArrow))
         {
+            direction = 1;
             playerState = Global.PlayerState.Moving;
             player.transform.position += new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
             lastState = playerState;
-
+            PlayerRotate(player);
         }
         else
         {
@@ -111,6 +135,17 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             lastState = playerState;
         }
 
+    }
+    private void PlayerRotate(GameObject player)
+    {
+        if(Input.GetAxis("Horizontal")>0)
+        {
+            player.transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, 90));
+        }
+        else
+        {
+            player.transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -90));
+        }
     }
     public void ToSummon()
     {
@@ -129,11 +164,11 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         IEnumerator coroutine = Recorder();
         StartCoroutine(coroutine);
     }
-    public void Releasing()
+    public void Releasing(GameObject sketchman)
     {
         playerState = Global.PlayerState.Releasing;
         //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
-        SketchSystem.Instance.ReleasingAction();
+        SketchSystem.Instance.ReleasingAction(sketchman);
         //释放纸人实体
         isRecorded = false;
         playerState = Global.PlayerState.Idle;
@@ -153,4 +188,15 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         recordingTimeSlider.value = 0;
         recordingTimeSlider.GameObject().SetActive(false);
     }
+    public void InteractTriggerEnter(Collider other)
+    {
+        interactTrigger = true;
+        interactObject = other.gameObject;
+    }
+    public void InteractTriggerExit() 
+    {
+        interactTrigger = false; 
+        interactObject = null;
+    }
+
 }

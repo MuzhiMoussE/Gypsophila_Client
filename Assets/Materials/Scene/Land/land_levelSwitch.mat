@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: levelSwitch
+  m_Name: land_levelSwitch
   m_Shader: {fileID: 4800000, guid: b6db697ca1e99fc4c91dbb5ec91a3531, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []

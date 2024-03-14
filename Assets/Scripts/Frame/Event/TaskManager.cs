@@ -56,9 +56,6 @@ public class InteractiveItems :MonoBehaviour
 }
 public class TaskManager : SingletonMonoBase<TaskManager> 
 {
-    public string levelName;
-    //存储可交互物品
-    public List<InteractiveItems> interactiveItems;
     //大关卡中有多少个小关卡，对应的关卡事件
     public List<LevelEvent> levelEvents;
     //下一个事件索引
@@ -82,7 +79,7 @@ public class TaskManager : SingletonMonoBase<TaskManager>
     private void OnItemStateChanged()
     {
         //判断事件是否启动
-        if (levelEvents[_nextEventIndex].CheckEvent())
+        if (_nextEventIndex <levelEvents.Count && levelEvents[_nextEventIndex].CheckEvent())
         {
             //执行事件后果
             EventCenter.Broadcast(GameEvent.TriggerLevelEvent, levelEvents[_nextEventIndex]);

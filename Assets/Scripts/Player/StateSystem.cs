@@ -30,9 +30,11 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     private bool isRecorded = false;
     private bool longPress = false;
     private int direction = 0;
-    private bool interactTrigger = false;
+    [SerializeField]private bool interactTrigger = false;
+    private Stack<GameObject> interactStack = new Stack<GameObject>();
     [SerializeField]private GameObject interactObject = null;
     private bool getBox = false;
+    private GameObject box = null;
     public void InputListener(GameObject player,Rigidbody player_rd,GameObject sketchman)
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -122,15 +124,47 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         recordingTimeSlider.value = 0;
         recordingTimeSlider.GameObject().SetActive(false);
     }
+    //这里先进后出，应该用栈
     public void InteractTriggerEnter(Collider other)
     {
         interactTrigger = true;
-        interactObject = other.gameObject;
+        if (other.tag == Global.ItemTag.BOX)
+        {
+            box = other.gameObject;
+        }
+        else
+        {
+            interactStack.Push(other.gameObject);
+            interactObject = interactStack.Peek();
+        }
+
     }
-    public void InteractTriggerExit() 
+    public void InteractTriggerExit(Collider other) 
     {
-        interactTrigger = false; 
-        interactObject = null;
+        if(other.gameObject.tag == Global.ItemTag.BOX)
+        {
+            box = null;
+            if(interactStack.Count == 0) interactTrigger = false;
+        }
+        else
+        {
+            if (interactStack.Count <= 1)
+            {
+                interactTrigger = false;
+                interactObject = null;
+                interactStack.Clear();
+                if(box!= null) interactTrigger =true;
+            }
+            else if (interactStack.Contains(other.gameObject))
+            {
+                interactObject = interactStack.Peek();
+            }
+        }
+
+        
+        
+        
+
     }
     private void LongOrShortPressFunction()
     {
@@ -151,19 +185,22 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     private void InteractFunction()
     {
-        if (interactObject.tag == Global.ItemTag.BOX && !getBox)
+        if (box!=null && !getBox)
         {
             getBox = true;
             Debug.Log("GET BOX!");
-            interactObject.gameObject.GetComponent<Boxes>().dragged = true;
+            box.gameObject.GetComponent<Boxes>().dragged = true;
+            box.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            box.gameObject.transform.position += new Vector3(0, 0.3f, 0);
             canJump = false;
             
         }
-        else if (interactObject.tag == Global.ItemTag.BOX && getBox)
+        else if (box!=null && getBox)
         {
             getBox = false;
             Debug.Log("THROW BOX!");
-            interactObject.gameObject.GetComponent<Boxes>().dragged = false;
+            box.gameObject.GetComponent<Boxes>().dragged = false;
+            box.gameObject.GetComponent<Rigidbody>().isKinematic=false;
             Instance.playerState = Global.PlayerState.Idle;
             canJump = true;
         }

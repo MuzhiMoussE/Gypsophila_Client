@@ -21,14 +21,14 @@ public class Boxes : MonoBehaviour
     private void PlayerGetListener()
     {
         if (!playerNear) return;
-        if(dragged)
+        if (dragged && StateSystem.Instance.playerState != Global.PlayerState.Dragging)
         {
             this.gameObject.transform.SetParent(player.transform);
             StateSystem.Instance.playerState = Global.PlayerState.Dragging;
-            Debug.Log("GET!!!");
+            //Debug.Log("GET!!!");
             return;
         }
-        else
+        else if (!dragged && gameObject.transform.parent != null)
         {
             this.gameObject.transform.parent = null;
             return;

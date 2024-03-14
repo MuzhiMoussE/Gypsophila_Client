@@ -49,7 +49,7 @@ public enum ItemState
     Off
 }
 [Serializable]
-public class InteractiveItems
+public class InteractiveItems :MonoBehaviour
 {
     public Item item;
     public ItemState state;

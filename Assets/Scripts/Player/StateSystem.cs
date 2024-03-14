@@ -64,6 +64,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         else if(Input.GetKeyDown(KeyCode.S))//切换画面绘制纸人
         {
             playerState = Global.PlayerState.ToSummon;
+            AnimSystem.Instance.ChangeAnimState(playerState);
             ToSummon();
         }
         //跳跃
@@ -88,10 +89,12 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         //SceneManager.LoadScene(2);
         Debug.Log("召唤跳转！");
         playerState = Global.PlayerState.Idle;
+        AnimSystem.Instance.ChangeAnimState(playerState);
     }
     public void Recording()
     {
         playerState = Global.PlayerState.Recording;
+        AnimSystem.Instance.ChangeAnimState(playerState);
         SketchSystem.Instance.StartRecordingAction();
         recordingTimeSlider.GameObject().SetActive(true);
         Debug.Log("开始记录！");
@@ -103,11 +106,13 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public void Releasing(GameObject sketchman)
     {
         playerState = Global.PlayerState.Releasing;
+        AnimSystem.Instance.ChangeAnimState(playerState);
         //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
         SketchSystem.Instance.ReleasingAction(sketchman);
         //释放纸人实体
         isRecorded = false;
         playerState = Global.PlayerState.Idle;
+        AnimSystem.Instance.ChangeAnimState(playerState);
     }
     IEnumerator Recorder()
     {
@@ -121,6 +126,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         SketchSystem.Instance.StopRecordingAction();
         Debug.Log("记录完成！");
         playerState = Global.PlayerState.Idle;
+        AnimSystem.Instance.ChangeAnimState(playerState);
         recordingTimeSlider.value = 0;
         recordingTimeSlider.GameObject().SetActive(false);
     }
@@ -160,11 +166,6 @@ public class StateSystem : SingletonMonoBase<StateSystem>
                 interactObject = interactStack.Peek();
             }
         }
-
-        
-        
-        
-
     }
     private void LongOrShortPressFunction()
     {
@@ -224,19 +225,24 @@ public class StateSystem : SingletonMonoBase<StateSystem>
                 //Debug.Log("无记录！");
             }
             playerState = Global.PlayerState.Idle;
+            AnimSystem.Instance.ChangeAnimState(playerState);
         }
     }
     private void MoveLeftFunction(GameObject player)
     {
         direction = -1;
-        playerState = Global.PlayerState.Moving;
+        if(!getBox) playerState = Global.PlayerState.Moving;
+        else playerState = Global.PlayerState.Dragging;
+        AnimSystem.Instance.ChangeAnimState(playerState);
         player.transform.position -= new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
         PlayerRotate(player);
     }
     private void MoveRightFunction(GameObject player)
     {
         direction = 1;
-        playerState = Global.PlayerState.Moving;
+        if(!getBox)playerState = Global.PlayerState.Moving;
+        else playerState = Global.PlayerState.Dragging;
+        AnimSystem.Instance.ChangeAnimState(playerState);
         player.transform.position += new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
         PlayerRotate(player);
     }
@@ -248,6 +254,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             if (jumpTime < jumpMaxTime && canJump)
             {
                 playerState = Global.PlayerState.Jumping;
+                AnimSystem.Instance.ChangeAnimState(playerState);
                 player.transform.position += new Vector3(0, jumpForce * Time.deltaTime, 0);
                 jumpTime += Time.deltaTime;
             }
@@ -266,6 +273,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             {
                 canJump = true;
                 playerState = Global.PlayerState.Jumping;
+                AnimSystem.Instance.ChangeAnimState(playerState);
             }
         }
         if (Input.GetKeyUp(KeyCode.Space))
@@ -283,15 +291,18 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             MoveLeftFunction(player);
-            if (!onGround) playerState = Global.PlayerState.Jumping;
-            if(getBox) playerState = Global.PlayerState.Dragging;
+            OnMoingFunction();
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             MoveRightFunction(player);
-            
-            if (!onGround) playerState = Global.PlayerState.Jumping;
-            if (getBox) playerState = Global.PlayerState.Dragging;
+            OnMoingFunction();
         }
+    }
+    private void OnMoingFunction()
+    {
+        if (!onGround) playerState = Global.PlayerState.Jumping;
+        if (getBox) playerState = Global.PlayerState.Dragging;
+        AnimSystem.Instance.ChangeAnimState(playerState);
     }
 }

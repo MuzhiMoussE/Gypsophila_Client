@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Global;
 
 public class Boxes : MonoBehaviour
 {
@@ -24,7 +25,6 @@ public class Boxes : MonoBehaviour
         if (dragged && StateSystem.Instance.playerState != Global.PlayerState.Dragging)
         {
             this.gameObject.transform.SetParent(player.transform);
-            StateSystem.Instance.playerState = Global.PlayerState.Dragging;
             //Debug.Log("GET!!!");
             return;
         }

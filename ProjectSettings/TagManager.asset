@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Box
   - SketchMan
+  - LevelSwitch
   layers:
   - Default
   - TransparentFX

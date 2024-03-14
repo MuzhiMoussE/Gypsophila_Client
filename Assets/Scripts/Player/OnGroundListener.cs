@@ -10,6 +10,7 @@ public class OnGroundListener : MonoBehaviour
         {
             StateSystem.Instance.onGround = true;
             StateSystem.Instance.playerState = Global.PlayerState.Idle;
+            AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -18,6 +19,7 @@ public class OnGroundListener : MonoBehaviour
         {
             StateSystem.Instance.onGround = false;
             StateSystem.Instance.playerState = Global.PlayerState.Jumping;
+            AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
         }
     }
     private void OnTriggerStay(Collider other)
@@ -26,6 +28,7 @@ public class OnGroundListener : MonoBehaviour
         {
             StateSystem.Instance.onGround = true ;
             StateSystem.Instance.playerState = Global.PlayerState.Idle;
+            AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
             return;
         }
     }

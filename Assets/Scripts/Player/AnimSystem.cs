@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
-public class AnimSystem : MonoBehaviour
+public class AnimSystem : SingletonMonoBase<AnimSystem>
 {
-    // Start is called before the first frame update
-    void Start()
+    private Animator animator;
+    private string animStateString = null;
+    private Global.PlayerState lastState = Global.PlayerState.Idle;
+    public void setInit(Animator _animator)
     {
-        
+        animator = _animator;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void ChangeAnimState(Global.PlayerState state)
     {
+        if (lastState == state)
+            return;
+        animator.SetBool(lastState.ToString(), false);
+        animStateString = state.ToString();
+        animator.SetBool(animStateString, true);
+        lastState = state;
         
     }
 }

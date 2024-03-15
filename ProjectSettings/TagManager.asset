@@ -7,11 +7,12 @@ TagManager:
   - Box
   - SketchMan
   - LevelSwitch
+  - SightSwitch
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Reflecter
   - Water
   - UI
   - 

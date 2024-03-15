@@ -205,6 +205,15 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             Instance.playerState = Global.PlayerState.Idle;
             canJump = true;
         }
+        if(interactObject != null)
+        {
+            if (interactObject.tag == Global.ItemTag.SIGHT_SWITCH)
+            {
+                SightSwitch sightSwitch = interactObject.GetComponent<SightSwitch>();
+                sightSwitch.Interact();
+            }
+        }
+
     }
     private void ReleaseFunction(GameObject sketchman,GameObject player)
     {

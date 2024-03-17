@@ -23,19 +23,19 @@ namespace ReflectiveProjectionDemo
 
         void Update()
         {
-            if(switchcontroller.state == ItemState.On)
+            if(switchcontroller.state != ItemState.On)
             {
-                return;
-            }
-            // GetHitObjects is a property within the core script
-            // which returns a list of all the hit objects
-            if (script.GetHitObjects.Contains(gameObject)) {
-                gameObject.GetComponent<MeshRenderer>().material = RedMaterial;
-            }
-            else {
-                gameObject.GetComponent<MeshRenderer>().material = OriginalMaterial;
-            }
-            
+                // GetHitObjects is a property within the core script
+                // which returns a list of all the hit objects
+                if (script.GetHitObjects.Contains(gameObject))
+                {
+                    gameObject.GetComponent<MeshRenderer>().material = RedMaterial;
+                }
+                else
+                {
+                    gameObject.GetComponent<MeshRenderer>().material = OriginalMaterial;
+                }
+            } 
         }
     }
 }

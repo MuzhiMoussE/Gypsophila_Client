@@ -28,18 +28,17 @@ namespace ReflectiveProjectionDemo
                     _switch.state = ItemState.On;
                     EventCenter.Broadcast(GameEvent.ItemStateChangeEvent);
                 }
-
             }
-            else
-            {
-                gameObject.GetComponent<MeshRenderer>().material = OriginalMaterial;
-                if(_switch.state == ItemState.On)
-                {
-                    _switch.state = ItemState.Off;
-                    EventCenter.Broadcast(GameEvent.ItemStateChangeEvent);
-                }
+            //else
+            //{
+            //    gameObject.GetComponent<MeshRenderer>().material = OriginalMaterial;
+            //    if(_switch.state == ItemState.On)
+            //    {
+            //        _switch.state = ItemState.Off;
+            //        EventCenter.Broadcast(GameEvent.ItemStateChangeEvent);
+            //    }
 
-            }
+            //}
         }
     }
 }

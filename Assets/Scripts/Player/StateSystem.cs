@@ -1,3 +1,4 @@
+using Frame;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,6 +36,9 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     [SerializeField]private GameObject interactObject = null;
     private bool getBox = false;
     private GameObject box = null;
+
+    private List<ReflectiveProjection> releasers;
+
     public void InputListener(GameObject player,Rigidbody player_rd,GameObject sketchman)
     {
         if(Input.GetKeyDown(KeyCode.Escape))

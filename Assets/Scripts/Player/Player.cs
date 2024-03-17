@@ -47,5 +47,9 @@ public class Player : MonoBehaviour
         }
 
     }
+    public void PlayerDead()
+    {
+        StateSystem.Instance.DeadEvent();
+    }
 
 }

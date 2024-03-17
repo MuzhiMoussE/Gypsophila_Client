@@ -175,6 +175,12 @@ public class ReflectiveProjection : MonoBehaviour
                 
                 reflectPoints.Add(tuple);
                 _hitObjects.Add(hit.transform.gameObject);
+                if(hit.transform.gameObject.tag == Global.ItemTag.PLAYER)
+                {
+                    Debug.Log("HIT PLAYER!!!");
+                    //击中player
+                    hit.transform.gameObject.GetComponent<Player>().PlayerDead();
+                }
             }
 
             

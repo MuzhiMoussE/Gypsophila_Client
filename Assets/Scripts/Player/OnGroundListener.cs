@@ -18,8 +18,8 @@ public class OnGroundListener : MonoBehaviour
         if (other.gameObject.tag != Global.ItemTag.PLAYER)
         {
             StateSystem.Instance.onGround = false;
-            StateSystem.Instance.playerState = Global.PlayerState.Jumping;
-            AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
+            //StateSystem.Instance.playerState = Global.PlayerState.Jumping;
+            //AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
         }
     }
     private void OnTriggerStay(Collider other)
@@ -27,8 +27,8 @@ public class OnGroundListener : MonoBehaviour
         if (other.gameObject.tag != Global.ItemTag.PLAYER)
         {
             StateSystem.Instance.onGround = true ;
-            StateSystem.Instance.playerState = Global.PlayerState.Idle;
-            AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
+            //StateSystem.Instance.playerState = Global.PlayerState.Idle;
+            //AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
             return;
         }
     }

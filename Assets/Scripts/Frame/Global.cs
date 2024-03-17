@@ -12,7 +12,6 @@ public class Global
         Moving,
         Jumping,
         ToSummon,
-        Summoning,
         Releasing,
         Recording,
         Interacting,

@@ -6,7 +6,7 @@ namespace ReflectiveProjectionDemo
     {
         // get the script
         public ReflectiveProjection script;
-        
+        private SightSwitch switchcontroller;
         // get the red material
         public Material RedMaterial;
         
@@ -17,11 +17,16 @@ namespace ReflectiveProjectionDemo
         void Start()
         {
             OriginalMaterial = gameObject.GetComponent<MeshRenderer>().material;
+            switchcontroller = gameObject.GetComponentInParent<LevelFinishEvent>().sightReleaser.GetComponent<SightSwitch>();
         }
 
 
         void Update()
         {
+            if(switchcontroller.state == ItemState.On)
+            {
+                return;
+            }
             // GetHitObjects is a property within the core script
             // which returns a list of all the hit objects
             if (script.GetHitObjects.Contains(gameObject)) {

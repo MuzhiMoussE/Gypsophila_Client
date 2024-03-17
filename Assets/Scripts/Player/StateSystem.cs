@@ -15,13 +15,13 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public Slider recordSlider;
     public Slider recordingTimeSlider;
     public float recordingTime = 5f;//记录存取时间
-    public float moveSpeed;
+    public float moveSpeed = 4f;
     public float jumpForce;
     private float jumpMaxTime = 0.2f;
     private float jumpTime = 0;
     private bool canJump = true;
     public bool onGround = true;
-
+    private bool isDead = false;
     public float sketchmanDistance = 5.0f;
 
     private float timer = 0f;
@@ -43,6 +43,10 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             Time.timeScale = 0;
             
         }
+        else if(Input.GetKeyDown(KeyCode.Q))
+        {
+            RotateReleaser(false);
+        }
         //短按释放，长按记录动作
         else if (Input.GetKey(KeyCode.E))
         {
@@ -63,14 +67,13 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         }
         else if(Input.GetKeyDown(KeyCode.S))//切换画面绘制纸人
         {
-            playerState = Global.PlayerState.ToSummon;
-            AnimSystem.Instance.ChangeAnimState(playerState);
             ToSummon();
         }
         //跳跃
         JumpFunction(player);
         //移动
         MoveFunction(player);
+        CheckDead(player);
 
     }
     private void PlayerRotate(GameObject player)
@@ -86,10 +89,12 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void ToSummon()
     {
-        //SceneManager.LoadScene(2);
-        Debug.Log("召唤跳转！");
-        playerState = Global.PlayerState.Idle;
+        playerState = Global.PlayerState.ToSummon;
         AnimSystem.Instance.ChangeAnimState(playerState);
+        Debug.Log("召唤跳转！");
+        IEnumerator e = ToIdle(5);
+        StartCoroutine(e);
+
     }
     public void Recording()
     {
@@ -107,12 +112,13 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     {
         playerState = Global.PlayerState.Releasing;
         AnimSystem.Instance.ChangeAnimState(playerState);
+        Debug.Log("RELEASING");
+        //释放纸人实体
+        IEnumerator e = ToIdle(1);
+        StartCoroutine(e);
         //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
         SketchSystem.Instance.ReleasingAction(sketchman);
-        //释放纸人实体
         isRecorded = false;
-        playerState = Global.PlayerState.Idle;
-        AnimSystem.Instance.ChangeAnimState(playerState);
     }
     IEnumerator Recorder()
     {
@@ -184,6 +190,15 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             }
         }
     }
+    private void RotateReleaser(bool isClockwise)
+    {
+        playerState = Global.PlayerState.Interacting;
+        AnimSystem.Instance.ChangeAnimState(playerState);
+        IEnumerator e = ToIdle(1);
+        StartCoroutine(e);
+        SightSwitch sightSwitch = interactObject.GetComponent<SightSwitch>();
+        sightSwitch.Interact(isClockwise) ;
+    }
     private void InteractFunction()
     {
         if (box!=null && !getBox)
@@ -192,7 +207,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             Debug.Log("GET BOX!");
             box.gameObject.GetComponent<Boxes>().dragged = true;
             box.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            box.gameObject.transform.position += new Vector3(0, 0.3f, 0);
+            box.gameObject.transform.position += new Vector3(0, 0.5f, 0);
             canJump = false;
             
         }
@@ -209,8 +224,8 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         {
             if (interactObject.tag == Global.ItemTag.SIGHT_SWITCH)
             {
-                SightSwitch sightSwitch = interactObject.GetComponent<SightSwitch>();
-                sightSwitch.Interact();
+                RotateReleaser(true);
+
             }
         }
 
@@ -219,6 +234,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     {
         Releasing(sketchman);
         sketchman.transform.position = player.transform.position + new Vector3(sketchmanDistance, 0, 0) * direction;
+        sketchman.transform.position += new Vector3(0, 2, 0);
         sketchman.SetActive(true);
     }
     private void ShortPressFunction(GameObject sketchman,GameObject player)
@@ -233,15 +249,23 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             {
                 //Debug.Log("无记录！");
             }
-            playerState = Global.PlayerState.Idle;
-            AnimSystem.Instance.ChangeAnimState(playerState);
+            //playerState = Global.PlayerState.Idle;
+            //AnimSystem.Instance.ChangeAnimState(playerState);
         }
     }
     private void MoveLeftFunction(GameObject player)
     {
         direction = -1;
-        if(!getBox) playerState = Global.PlayerState.Moving;
-        else playerState = Global.PlayerState.Dragging;
+        if (!getBox)
+        {
+            playerState = Global.PlayerState.Moving;
+            moveSpeed = 4f;
+        }
+        else
+        {
+            playerState = Global.PlayerState.Dragging;
+            moveSpeed = 2f;
+        }
         AnimSystem.Instance.ChangeAnimState(playerState);
         player.transform.position -= new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
         PlayerRotate(player);
@@ -249,8 +273,16 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     private void MoveRightFunction(GameObject player)
     {
         direction = 1;
-        if(!getBox)playerState = Global.PlayerState.Moving;
-        else playerState = Global.PlayerState.Dragging;
+        if(!getBox)
+        {
+            playerState = Global.PlayerState.Moving;
+            moveSpeed = 4f;
+        }
+        else
+        {
+            playerState = Global.PlayerState.Dragging;
+            moveSpeed = 2f; 
+        }
         AnimSystem.Instance.ChangeAnimState(playerState);
         player.transform.position += new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
         PlayerRotate(player);
@@ -307,11 +339,53 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             MoveRightFunction(player);
             OnMoingFunction();
         }
+
+        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow))
+        {
+            playerState = Global.PlayerState.Idle;
+            AnimSystem.Instance.ChangeAnimState(playerState);
+        }
     }
     private void OnMoingFunction()
     {
         if (!onGround) playerState = Global.PlayerState.Jumping;
         if (getBox) playerState = Global.PlayerState.Dragging;
+        AnimSystem.Instance.ChangeAnimState(playerState);
+    }
+
+    public void CheckDead(GameObject player)
+    {
+         if(player.transform.position.y < -30)
+         {
+            isDead = true;
+         }
+
+
+
+         if(isDead)
+         {
+            DeadEvent();
+         }
+    }
+    public void DeadEvent()
+    {
+        playerState = Global.PlayerState.Die;
+        AnimSystem.Instance.ChangeAnimState(playerState);
+        IEnumerator e = GameOver();
+        StartCoroutine(e);
+        
+    }
+    IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(5);
+        Time.timeScale = 0;
+        Debug.Log("Dead!");
+        Application.Quit();
+    }
+    IEnumerator ToIdle(float _second)
+    {
+        yield return new WaitForSeconds(_second);
+        playerState = Global.PlayerState.Idle;
         AnimSystem.Instance.ChangeAnimState(playerState);
     }
 }

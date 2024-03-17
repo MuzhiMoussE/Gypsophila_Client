@@ -6,15 +6,16 @@ public class SightSwitch : InteractiveItems
 {
     public int stateCount;
     private float rotateAngle;
-    public GameObject receiver;
     public List<GameObject> switches = new List<GameObject>();
     private void Start()
     {
         rotateAngle = 360 / stateCount;
     }
-    public void Interact()
+    public void Interact(bool isClockwise)
     {
-        gameObject.transform.Rotate(-rotateAngle, 0,0);
+        if(isClockwise) gameObject.transform.Rotate(rotateAngle, 0, 0);
+        else gameObject.transform.Rotate(-rotateAngle, 0, 0);
+
     }
     public void LevelFinishState()
     {
@@ -23,7 +24,6 @@ public class SightSwitch : InteractiveItems
             _switch.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.yellow);
         }
     }
-
 }
 
 

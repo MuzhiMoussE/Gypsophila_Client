@@ -5,15 +5,44 @@ using Utility;
 
 public class AudioManager : SingletonMonoBase<AudioManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]private AudioClip Moving;
+    [SerializeField] private AudioClip Jumping;
+    [SerializeField] private AudioClip ToSummon;
+    [SerializeField] private AudioClip Releasing;
+    [SerializeField] private AudioClip Recording;
+    [SerializeField] private AudioClip Dragging;
+    [SerializeField] private AudioClip Die;
+    private AudioSource audioSource;
+    private void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeAudio(Global.PlayerState state)
     {
-        
+        if(state == Global.PlayerState.Idle)
+        {
+            audioSource.Pause();
+        }
+        else if(state == Global.PlayerState.Moving)
+        {
+            audioSource.clip = Moving;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+        else if( state == Global.PlayerState.Jumping)
+        {
+            audioSource.clip = Jumping;
+            audioSource.loop = false;
+            audioSource.Play();
+        }
+        else if(state == Global.PlayerState.Dragging)
+        {
+            audioSource.clip = Dragging;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
     }
+
+
 }

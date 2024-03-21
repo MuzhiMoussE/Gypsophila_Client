@@ -15,6 +15,8 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public Global.PlayerState playerState = Global.PlayerState.Idle;
     public Slider recordSlider;
     public Slider recordingTimeSlider;
+    public Text tipsText;
+    public bool showTips;
     public float recordingTime = 5f;//记录存取时间
     public float moveSpeed = 4f;
     public float jumpForce;
@@ -35,7 +37,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     private Stack<GameObject> interactStack = new Stack<GameObject>();
     [SerializeField]private GameObject interactObject = null;
     private bool getBox = false;
-    private GameObject box = null;
+    [SerializeField]private GameObject box = null;
 
     private List<ReflectiveProjection> releasers;
 
@@ -141,23 +143,48 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         recordingTimeSlider.GameObject().SetActive(false);
     }
     //这里先进后出，应该用栈
+
+    private void ShowTips(GameObject _object)
+    {
+        tipsText.gameObject.SetActive(true);
+        if(_object.tag == Global.ItemTag.BOX)
+        {
+            tipsText.text = "按下E键拿起/放下箱子";
+        }
+        else if(_object.tag == Global.ItemTag.SIGHT_SWITCH)
+        {
+            tipsText.text = "按下E键/Q键转动视线";
+        }
+        else
+        {
+            tipsText.text = "";
+        }
+    }
+    private void CloseTips()
+    {
+        tipsText.gameObject.SetActive(false);
+    }
+
     public void InteractTriggerEnter(Collider other)
     {
         interactTrigger = true;
         if (other.tag == Global.ItemTag.BOX)
         {
             box = other.gameObject;
+            if (showTips) ShowTips(box);
         }
         else
         {
             interactStack.Push(other.gameObject);
             interactObject = interactStack.Peek();
+            if (showTips) ShowTips(interactObject);
         }
 
     }
     public void InteractTriggerExit(Collider other) 
     {
-        if(other.gameObject.tag == Global.ItemTag.BOX)
+        CloseTips();
+        if (other.gameObject.tag == Global.ItemTag.BOX)
         {
             box = null;
             if(interactStack.Count == 0) interactTrigger = false;
@@ -211,9 +238,9 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             Debug.Log("GET BOX!");
             box.gameObject.GetComponent<Boxes>().dragged = true;
             box.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            box.gameObject.transform.position += new Vector3(0, 0.5f, 0);
+            box.gameObject.transform.position += new Vector3(0, 1f, 0);
             canJump = false;
-            
+            showTips = false;
         }
         else if (box!=null && getBox)
         {
@@ -223,6 +250,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             box.gameObject.GetComponent<Rigidbody>().isKinematic=false;
             Instance.playerState = Global.PlayerState.Idle;
             canJump = true;
+            showTips = true;
         }
         if(interactObject != null)
         {

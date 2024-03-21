@@ -11,7 +11,7 @@ public class LevelSwitch : InteractiveItems
     private Color originColor;
     private Material mat;
     private List<GameObject> in_items = new List<GameObject>();
-    private float downDistance = 0.2f;
+    private float downDistance = 0.4f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -82,7 +82,7 @@ public class LevelSwitch : InteractiveItems
     {
         state = ItemState.Off;
         mat = GetComponent<MeshRenderer>().material;
-        originColor = mat.GetColor("_Color");
+        originColor =mat.GetColor("_Color");
 
     }
 

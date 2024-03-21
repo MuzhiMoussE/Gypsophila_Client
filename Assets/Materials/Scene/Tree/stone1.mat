@@ -81,7 +81,7 @@ Material:
     - _OutlineWidth0: 10.5
     - _OutlineWidth1: 5
     - _Parallax: 0.02
-    - _RimRate: 3.19
+    - _RimRate: 5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

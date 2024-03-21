@@ -5,16 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
-    [SerializeField]private Slider _slider;
-    [SerializeField] private Slider _slider_recording;
     private GameObject _player;
     private Rigidbody _rigidbody;
     [SerializeField]private GameObject _sketchman;
     private void Awake()
     {
         _player = gameObject;
-      
-        _slider_recording.GameObject().SetActive(false);
+       
         _rigidbody = gameObject.GetComponent<Rigidbody>();
     }
 

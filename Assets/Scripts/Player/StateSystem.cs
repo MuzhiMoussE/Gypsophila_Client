@@ -179,7 +179,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public void InteractTriggerExit(Collider other) 
     {
         CloseTips();
-        if (other.gameObject.tag == Global.ItemTag.BOX)
+        if (other.gameObject.tag == Global.ItemTag.BOX && !getBox)
         {
             box = null;
             if(interactStack.Count == 0) interactTrigger = false;

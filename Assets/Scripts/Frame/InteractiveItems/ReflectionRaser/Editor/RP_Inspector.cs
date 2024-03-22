@@ -29,8 +29,6 @@ public class RP_Inspector : Editor
 
     public override void OnInspectorGUI()
     {
-        var button = GUILayout.Button("Click for more tools");
-        if (button) Application.OpenURL("https://assetstore.unity.com/publishers/39163");
         EditorGUILayout.Space(5);
 
         ReflectiveProjection script = (ReflectiveProjection)target;

@@ -22,24 +22,35 @@ public class AudioManager : SingletonMonoBase<AudioManager>
     {
         if(state == Global.PlayerState.Idle)
         {
+            audioSource.pitch = 1f;
             audioSource.Pause();
         }
         else if(state == Global.PlayerState.Moving)
         {
             audioSource.clip = Moving;
             audioSource.loop = true;
+            audioSource.pitch = 1f;
             audioSource.Play();
         }
         else if( state == Global.PlayerState.Jumping)
         {
             audioSource.clip = Jumping;
             audioSource.loop = false;
+            audioSource.pitch = 1f;
             audioSource.Play();
         }
         else if(state == Global.PlayerState.Dragging)
         {
             audioSource.clip = Dragging;
             audioSource.loop = true;
+            audioSource.pitch = 1.67f;
+            audioSource.Play();
+        }
+        else if(state == Global.PlayerState.Die)
+        {
+            audioSource.clip = Die;
+            audioSource.loop = false;
+            audioSource.pitch = 1f;
             audioSource.Play();
         }
     }

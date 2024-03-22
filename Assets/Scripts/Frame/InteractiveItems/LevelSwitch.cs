@@ -12,6 +12,7 @@ public class LevelSwitch : InteractiveItems
     private Material mat;
     private List<GameObject> in_items = new List<GameObject>();
     private float downDistance = 0.4f;
+    private AudioSource audioSource;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -62,10 +63,12 @@ public class LevelSwitch : InteractiveItems
         mat.SetColor("_Color",Color.white);
         gameObject.transform.position -= new Vector3(0, downDistance, 0);
         state = ItemState.On;
+        audioSource.Play();
         EventCenter.Broadcast(GameEvent.ItemStateChangeEvent);
     }
     public void SwitchOffEvent()
     {
+        audioSource.Play();
         mat.SetColor("_Color", originColor);
         gameObject.transform.position += new Vector3(0, downDistance, 0);
         state = ItemState.Off;
@@ -83,6 +86,7 @@ public class LevelSwitch : InteractiveItems
         state = ItemState.Off;
         mat = GetComponent<MeshRenderer>().material;
         originColor =mat.GetColor("_Color");
+        audioSource = GetComponent<AudioSource>();
 
     }
 

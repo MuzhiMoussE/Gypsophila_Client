@@ -18,7 +18,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public Text tipsText;
     public bool showTips;
     public float recordingTime = 5f;//记录存取时间
-    public float moveSpeed = 4f;
+    public float moveSpeed = 6f;
     public float jumpForce;
     private float jumpMaxTime = 0.2f;
     private float jumpTime = 0;
@@ -38,9 +38,6 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     [SerializeField]private GameObject interactObject = null;
     private bool getBox = false;
     [SerializeField]private GameObject box = null;
-
-    private List<ReflectiveProjection> releasers;
-
     public void InputListener(GameObject player,Rigidbody player_rd,GameObject sketchman)
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -143,7 +140,6 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         recordingTimeSlider.GameObject().SetActive(false);
     }
     //这里先进后出，应该用栈
-
     private void ShowTips(GameObject _object)
     {
         tipsText.gameObject.SetActive(true);
@@ -164,7 +160,6 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     {
         tipsText.gameObject.SetActive(false);
     }
-
     public void InteractTriggerEnter(Collider other)
     {
         interactTrigger = true;
@@ -238,7 +233,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             Debug.Log("GET BOX!");
             box.gameObject.GetComponent<Boxes>().dragged = true;
             box.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            box.gameObject.transform.position += new Vector3(0, 1f, 0);
+            //box.gameObject.transform.position += new Vector3(0, 0.3f, 0);
             canJump = false;
             showTips = false;
         }

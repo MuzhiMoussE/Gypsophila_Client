@@ -19,6 +19,11 @@ public class ObjectTriggerEvent : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == Global.ItemTag.PLAYER)  _event.Invoke();
+        if (other.tag == Global.ItemTag.PLAYER)
+        {
+            _event.Invoke();
+
+        }
+        
     }
 }

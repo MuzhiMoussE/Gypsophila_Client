@@ -5,6 +5,7 @@ using UnityEngine;
 public class UpLevel : MonoBehaviour
 {
     public GameObject player;
+    public bool onlyOnce = false;
 
     public void PlayerFollow()
     {
@@ -12,8 +13,13 @@ public class UpLevel : MonoBehaviour
     }
     public void PlayerMove()
     {
-        player.transform.parent = null;
-        player.transform.position += new Vector3(0, 1, 0);
+        if(onlyOnce)
+        {
+            player.transform.parent = null;
+            player.transform.position += new Vector3(0, 1, 0);
+            onlyOnce = false;
+        }
+
     }
 
     // Start is called before the first frame update

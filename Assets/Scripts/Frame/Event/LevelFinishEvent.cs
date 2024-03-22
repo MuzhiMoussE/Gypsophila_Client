@@ -12,16 +12,25 @@ public class LevelFinishEvent : MonoBehaviour
     public GameObject camLast;
     public GameObject camNext;
     public GameObject sightReleaser;
+    private AudioSource audioSource;
+    [SerializeField] AudioClip LevelMove;
     private float upSpeed;
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     public void MoveUpByAnim()
     {
         gameObject.GetComponent<Animator>().SetBool("Play", true);
+        audioSource.PlayOneShot(LevelMove);
     }
     public void MoveUp(float _distance)
     {
         originPos = gameObject.transform.position;
         targetPos = gameObject.transform.position + new Vector3(0, _distance, 0);
         transform.position = targetPos;
+        audioSource.pitch = 1.67f;
+        audioSource.PlayOneShot(LevelMove);
     }
     public void MoveDown(float _distance)
     {
@@ -41,7 +50,8 @@ public class LevelFinishEvent : MonoBehaviour
     public void LevelFinishStateForSights()
     {
         sightReleaser.GetComponent<SightSwitch>().LevelFinishState();
-        sightReleaser.SetActive(false);
+        CloserReleaser();
+        //sightReleaser.SetActive(false);
     }
     public void SetNextCamera()
     {
@@ -66,7 +76,14 @@ public class LevelFinishEvent : MonoBehaviour
     {
         sightReleaser.GetComponentInChildren<ReflectiveProjection>().enabled = false;
         sightReleaser.GetComponentInChildren<LineRenderer>().enabled = false;
+        sightReleaser.GetComponent<AudioSource>().Play();
+        IEnumerator e = releaserDisappear();
+        StartCoroutine(e);
+    }
+    IEnumerator releaserDisappear()
+    {
+        sightReleaser.GetComponent<Animator>().SetBool("Disappear", true);
+        yield return new WaitForSeconds(1.5f);
         sightReleaser.SetActive(false);
     }
-
 }

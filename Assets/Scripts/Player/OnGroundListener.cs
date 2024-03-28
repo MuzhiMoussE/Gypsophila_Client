@@ -9,7 +9,7 @@ public class OnGroundListener : MonoBehaviour
         if (other.gameObject.tag != Global.ItemTag.PLAYER)
         {
             StateSystem.Instance.onGround = true;
-            StateSystem.Instance.playerState = Global.PlayerState.Idle;
+            if(!StateSystem.Instance.isDead) StateSystem.Instance.playerState = Global.PlayerState.Idle;
             AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
         }
     }

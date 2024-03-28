@@ -24,20 +24,20 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     private float jumpTime = 0;
     private bool canJump = true;
     public bool onGround = true;
-    private bool isDead = false;
     public float sketchmanDistance = 5.0f;
-
+    public bool isDead = false;
     private float timer = 0f;
     private float intervalTime = 0.5f;//大于这个时间判定为长按
     private float recordTime = 1f;//按满1s触发长按事件
     private bool isRecorded = false;
+    private bool painted = false;
     private bool longPress = false;
     private int direction = 0;
-    [SerializeField]private bool interactTrigger = false;
+    private bool interactTrigger = false;
     private Stack<GameObject> interactStack = new Stack<GameObject>();
-    [SerializeField]private GameObject interactObject = null;
+    private GameObject interactObject = null;
     private bool getBox = false;
-    [SerializeField]private GameObject box = null;
+    private GameObject box = null;
     public void InputListener(GameObject player,Rigidbody player_rd,GameObject sketchman)
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -92,12 +92,15 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void ToSummon()
     {
-        playerState = Global.PlayerState.ToSummon;
-        AnimSystem.Instance.ChangeAnimState(playerState);
-        Debug.Log("召唤跳转！");
-        IEnumerator e = ToIdle(5);
-        StartCoroutine(e);
-
+        if (interactObject.tag == Global.ItemTag.PAINTER)
+        {
+            playerState = Global.PlayerState.ToSummon;
+            AnimSystem.Instance.ChangeAnimState(playerState);
+            Debug.Log("召唤跳转！");
+            painted = true;
+            IEnumerator e = ToIdle(5);
+            StartCoroutine(e);
+        }
     }
     public void Recording()
     {
@@ -113,15 +116,20 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void Releasing(GameObject sketchman)
     {
-        playerState = Global.PlayerState.Releasing;
-        AnimSystem.Instance.ChangeAnimState(playerState);
-        Debug.Log("RELEASING");
-        //释放纸人实体
-        IEnumerator e = ToIdle(1);
-        StartCoroutine(e);
-        //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
-        SketchSystem.Instance.ReleasingAction(sketchman);
-        isRecorded = false;
+        if(painted)
+        {
+            playerState = Global.PlayerState.Releasing;
+            AnimSystem.Instance.ChangeAnimState(playerState);
+            Debug.Log("RELEASING");
+            //释放纸人实体
+            IEnumerator e = ToIdle(1);
+            StartCoroutine(e);
+            //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
+            SketchSystem.Instance.ReleasingAction(sketchman);
+            isRecorded = false;
+            painted = false;
+        }
+
     }
     IEnumerator Recorder()
     {
@@ -150,6 +158,10 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         else if(_object.tag == Global.ItemTag.SIGHT_SWITCH)
         {
             tipsText.text = "按下E键/Q键转动视线";
+        }
+        else if (_object.tag == Global.ItemTag.PAINTER)
+        {
+            tipsText.text = "按下S键使用画板";
         }
         else
         {
@@ -243,7 +255,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             Debug.Log("THROW BOX!");
             box.gameObject.GetComponent<Boxes>().dragged = false;
             box.gameObject.GetComponent<Rigidbody>().isKinematic=false;
-            Instance.playerState = Global.PlayerState.Idle;
+            playerState = Global.PlayerState.Idle;
             canJump = true;
             showTips = true;
         }
@@ -384,19 +396,14 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     {
          if(player.transform.position.y < -30)
          {
-            isDead = true;
-         }
-
-
-
-         if(isDead)
-         {
             DeadEvent();
-         }
+        }
     }
     public void DeadEvent()
     {
+        isDead = true;  
         playerState = Global.PlayerState.Die;
+        //Debug.Log(playerState);
         AnimSystem.Instance.ChangeAnimState(playerState);
         IEnumerator e = GameOver();
         StartCoroutine(e);

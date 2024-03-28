@@ -8,6 +8,8 @@ TagManager:
   - SketchMan
   - LevelSwitch
   - SightSwitch
+  - Painter
+  - Trap
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - Reflecter
   - Water
   - UI
-  - 
+  - Object
   - 
   - 
   - 

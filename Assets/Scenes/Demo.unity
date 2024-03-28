@@ -1385,13 +1385,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerState: 0
-  lastState: 0
   recordSlider: {fileID: 1619808546}
   recordingTimeSlider: {fileID: 2110075717}
+  tipsText: {fileID: 0}
+  showTips: 0
   recordingTime: 5
   moveSpeed: 3
   jumpForce: 250
+  onGround: 1
   sketchmanDistance: 5
+  isDead: 0
 --- !u!1001 &1270434750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2684,7 +2687,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.88113207, g: 1, b: 0.96736956, a: 0}
+  m_BackGroundColor: {r: 0.23839444, g: 0.29455653, b: 0.5566038, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

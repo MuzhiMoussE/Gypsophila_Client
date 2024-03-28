@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace ReflectiveProjectionDemo
 {
     public class WallDetectRay : MonoBehaviour
     {
+        public bool isAnimObject = false;
         // get the script
         public ReflectiveProjection script;
         private SightSwitch switchcontroller;
@@ -35,8 +37,26 @@ namespace ReflectiveProjectionDemo
                 {
                     gameObject.GetComponent<MeshRenderer>().material = OriginalMaterial;
                 }
+                if(script.GetHitStopObjects.Contains(gameObject))
+                {
+                    if (isAnimObject)
+                    {
+                        gameObject.layer = 0;
+                        GetComponent<AudioSource>().Play();
+                        IEnumerator e = ObjDead();
+                        StartCoroutine(e);
+
+                    }
+                }
             } 
         }
+        IEnumerator ObjDead()
+        {
+            gameObject.GetComponent<Animator>().SetBool("Dead", true);
+            yield return new WaitForSeconds(1);
+            gameObject.SetActive(false);
+        }
+       
     }
 }
 

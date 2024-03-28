@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6720778760682951142}
   - component: {fileID: 7191886907600765135}
   - component: {fileID: 7329793866099923247}
+  - component: {fileID: 6595434497075410841}
   m_Layer: 0
   m_Name: Transfer
   m_TagString: Untagged
@@ -45,7 +46,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8
+  m_Radius: 0.94
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7329793866099923247
 MonoBehaviour:
@@ -63,6 +64,18 @@ MonoBehaviour:
   state: 0
   stateCount: 36
   switches: []
+--- !u!122 &6595434497075410841
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8851163672024681762}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4280295571
+  m_Size: 5.32
 --- !u!1001 &4253451326067831546
 PrefabInstance:
   m_ObjectHideFlags: 0

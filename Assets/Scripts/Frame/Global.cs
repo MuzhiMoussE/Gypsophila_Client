@@ -59,6 +59,8 @@ public class Global
         public static string SIGHT_SWITCH = "SightSwitch";
         public static string UNTAGGED = "Untagged";
         public static string SKETCH_MAN = "SketchMan";
+        public static string PAINTER = "Painter";
+        public static string TRAP = "Trap";
     }
 
 }

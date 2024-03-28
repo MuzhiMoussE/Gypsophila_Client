@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TriggerEvent : MonoBehaviour
 {
+    public GameObject triggerObj;
     public GameObject camLast;
     public GameObject camNext;
     public Camera cam;
@@ -32,5 +33,9 @@ public class TriggerEvent : MonoBehaviour
     public void SetCamColor()
     {
         cam.backgroundColor = _color;
+    }
+    public void SetTriggerObjDown()
+    {
+        triggerObj.GetComponent<Rigidbody>().isKinematic = false;
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.Events;
@@ -22,9 +23,11 @@ public class SketchUtility : SingletonMonoBase<SketchUtility>
     private float waittim;
     private int loadIndex = 0;
 
-    private void SetInit(GameObject gameobject)
+    private void SetInit()
     {
-        sketchmanRenderer = gameobject.GetComponent<SpriteRenderer>();
+        GameObject sketchman = GameObject.FindGameObjectWithTag(Global.ItemTag.SKETCH_MAN);
+        Debug.Log(sketchman.name);
+        sketchmanRenderer = sketchman.GetComponentInChildren<SpriteRenderer>();
         _time = 0;
         index = 0;
         waittim = 1 / frame_number;
@@ -42,6 +45,7 @@ public class SketchUtility : SingletonMonoBase<SketchUtility>
                 //此处可添加结束回调函数
             }
             sketchmanRenderer.sprite = sprites[index];
+            //Debug.Log(index);
         }
     }
 
@@ -73,14 +77,14 @@ public class SketchUtility : SingletonMonoBase<SketchUtility>
 
     private void LoadSprite()
     {
-        while(LoadTextureFromFile(Application.streamingAssetsPath + "/AnimSequence/test1/frame_" + loadIndex+".png"))
+        while(LoadTextureFromFile(Application.streamingAssetsPath + "/AnimSequence/sketch"+ArchiveSystem.sketchCnt+"/"+loadIndex+".png"))
         {
-            loadIndex += 10;
+            loadIndex ++;
         }
     }
-    public void SketchInit(GameObject gameObject)
+    public void SketchInit()
     {
-        SetInit(gameObject);
+        SetInit();
         LoadSprite();
     }
     public void StartReleasing()

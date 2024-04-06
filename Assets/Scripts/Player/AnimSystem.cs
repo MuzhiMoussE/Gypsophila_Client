@@ -19,7 +19,7 @@ public class AnimSystem : SingletonMonoBase<AnimSystem>
         animator.SetBool(lastState.ToString(), false);
         animStateString = state.ToString();
         animator.SetBool(animStateString, true);
-        Debug.Log("change " + lastState + "to" + state);
+        //Debug.Log("change " + lastState + "to" + state);
         lastState = state;
         AudioManager.Instance.ChangeAudio(state);
         

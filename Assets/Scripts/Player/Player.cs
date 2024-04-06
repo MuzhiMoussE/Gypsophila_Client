@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
     }
     public void PlayerDead()
     {
-        StateSystem.Instance.DeadEvent();
+        StateSystem.Instance.DeadEvent(_player);
     }
 
 }

@@ -3,10 +3,12 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utility;
 
@@ -29,8 +31,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     private float timer = 0f;
     private float intervalTime = 0.5f;//大于这个时间判定为长按
     private float recordTime = 1f;//按满1s触发长按事件
-    private bool isRecorded = false;
-    private bool painted = false;
+    
     private bool longPress = false;
     private int direction = 0;
     private bool interactTrigger = false;
@@ -53,13 +54,15 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         //短按释放，长按记录动作
         else if (Input.GetKey(KeyCode.E))
         {
-            LongOrShortPressFunction();
+            LongOrShortPressFunction(); 
         }
         else if(Input.GetKeyUp(KeyCode.E))//利用按键抬手判断是不是短按
         {
+            
             if(!longPress)
             {
                 ShortPressFunction(sketchman, player);
+                
             }
             else if(timer < recordTime)
             {
@@ -92,14 +95,39 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void ToSummon()
     {
-        if (interactObject.tag == Global.ItemTag.PAINTER)
+        if (interactObject.tag == Global.ItemTag.PAINTER && !ArchiveSystem.painted)
         {
+            
             playerState = Global.PlayerState.ToSummon;
             AnimSystem.Instance.ChangeAnimState(playerState);
             Debug.Log("召唤跳转！");
-            painted = true;
+            ArchiveSystem.painted = true;
             IEnumerator e = ToIdle(5);
             StartCoroutine(e);
+            SceneManager.LoadScene(4);
+            //StartCoroutine(LoadScene(4));
+
+
+        }
+    }
+    IEnumerator LoadScene(int index)
+    {
+        //获取加载对象
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(index);
+        //设置加载完成后不跳转
+        asyncLoad.allowSceneActivation = false;
+
+        while (!asyncLoad.isDone)
+        {
+            //输出加载进度
+            Debug.Log(asyncLoad.progress);
+            //进度.百分之九十后进行操作,当进度为百分之90其实已经完成了大部分的工作,就可以进行下面的逻辑处理了
+            if (asyncLoad.progress >= 0.9f)
+            {
+                asyncLoad.allowSceneActivation = true;
+            }
+
+            yield return null;
         }
     }
     public void Recording()
@@ -116,19 +144,18 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void Releasing(GameObject sketchman)
     {
-        if(painted)
-        {
-            playerState = Global.PlayerState.Releasing;
-            AnimSystem.Instance.ChangeAnimState(playerState);
-            Debug.Log("RELEASING");
-            //释放纸人实体
-            IEnumerator e = ToIdle(1);
-            StartCoroutine(e);
-            //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
-            SketchSystem.Instance.ReleasingAction(sketchman);
-            isRecorded = false;
-            painted = false;
-        }
+        playerState = Global.PlayerState.Releasing;
+        AnimSystem.Instance.ChangeAnimState(playerState);
+        Debug.Log("RELEASING");
+        //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
+        SketchSystem.Instance.ReleasingAction(sketchman);
+        //释放纸人实体
+        IEnumerator e = ToIdle(1);
+        StartCoroutine(e);
+
+        ArchiveSystem.isRecorded = false;
+        ArchiveSystem.painted = false;
+        ArchiveSystem.sketchCnt++;
 
     }
     IEnumerator Recorder()
@@ -138,7 +165,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             recordingTimeSlider.value += recordingTime / 50f; 
             yield return new WaitForSeconds(recordingTime/10f);
         }
-        isRecorded = true;
+        ArchiveSystem.isRecorded = true;
         longPress = false;
         SketchSystem.Instance.StopRecordingAction();
         Debug.Log("记录完成！");
@@ -218,7 +245,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         if (timer >= intervalTime)//超过间隔时间也就是长按
         {
             longPress = true;
-            if (timer >= recordTime && !isRecorded)//开启记录
+            if (timer >= recordTime && !ArchiveSystem.isRecorded)//开启记录
             {
                 Recording();
             }
@@ -271,6 +298,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     private void ReleaseFunction(GameObject sketchman,GameObject player)
     {
+        Debug.Log("Start Releasing!");
         Releasing(sketchman);
         sketchman.transform.position = player.transform.position + new Vector3(sketchmanDistance, 0, 0) * direction;
         sketchman.transform.position += new Vector3(0, 2, 0);
@@ -283,13 +311,18 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             timer = 0f;//复位
             recordSlider.value = 0;
             if (interactTrigger) InteractFunction();
-            else if (isRecorded) ReleaseFunction(sketchman, player);
             else
             {
-                //Debug.Log("无记录！");
+                if (ArchiveSystem.isRecorded && ArchiveSystem.painted)
+                {
+                    Debug.Log("Start Releasing!");
+                    ReleaseFunction(sketchman, player);
+                }
+                else
+                {
+                    Debug.Log("无记录或未绘画！");
+                }
             }
-            //playerState = Global.PlayerState.Idle;
-            //AnimSystem.Instance.ChangeAnimState(playerState);
         }
     }
     private void MoveLeftFunction(GameObject player)
@@ -391,30 +424,32 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         if (getBox) playerState = Global.PlayerState.Dragging;
         AnimSystem.Instance.ChangeAnimState(playerState);
     }
-
     public void CheckDead(GameObject player)
     {
          if(player.transform.position.y < -30)
          {
-            DeadEvent();
+            DeadEvent(player);
         }
     }
-    public void DeadEvent()
+    public void DeadEvent(GameObject player)
     {
         isDead = true;  
         playerState = Global.PlayerState.Die;
         //Debug.Log(playerState);
         AnimSystem.Instance.ChangeAnimState(playerState);
-        IEnumerator e = GameOver();
+        IEnumerator e = GameOver(player);
         StartCoroutine(e);
         
     }
-    IEnumerator GameOver()
+    IEnumerator GameOver(GameObject player)
     {
         yield return new WaitForSeconds(5);
         Time.timeScale = 0;
         Debug.Log("Dead!");
-        Application.Quit();
+        //Application.Quit();
+        ArchiveSystem.LoadArchive(ArchiveSystem.LevelIndex, player.transform);
+        Time.timeScale = 1;
+        isDead = false;
     }
     IEnumerator ToIdle(float _second)
     {

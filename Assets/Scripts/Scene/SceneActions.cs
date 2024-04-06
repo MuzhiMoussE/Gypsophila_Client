@@ -6,37 +6,28 @@ using UnityEngine.UI;
 
 public class SceneActions : MonoBehaviour
 {
-    public Slider slider;
+    AsyncOperation asyncLoad;
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
-    }
-    private void OnEnable()
-    {
-        ChangeScene(1);
+        StartCoroutine(LoadScene(1));
+        ArchiveSystem.SceneIndex = 1;
     }
     // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        asyncLoad.allowSceneActivation = true;
     }
-    public void ChangeScene(int _sid)
+    IEnumerator LoadScene(int index)
     {
-        slider.gameObject.SetActive(true);
-        LoadNextLeaver();
-    }
-    public void LoadNextLeaver()
-    {
-        StartCoroutine(LoadLeaver());
-    }
-    IEnumerator LoadLeaver()
-    {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1); //获取当前场景并加一
-                                                                                                              //operation.allowSceneActivation = false;
-        while (!operation.isDone)   //当场景没有加载完毕
+        ArchiveSystem.SceneIndex = index;
+        //获取加载对象
+        asyncLoad = SceneManager.LoadSceneAsync(index);
+        //设置加载完成后不跳转
+        asyncLoad.allowSceneActivation = false;
+
+        while (!asyncLoad.isDone)
         {
-            slider.value = operation.progress;  //进度条与场景加载进度对应
             yield return null;
         }
     }

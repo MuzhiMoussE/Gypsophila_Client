@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using Utility;
 using Frame;
+using Unity.VisualScripting;
+
 [Serializable]
 public class LevelEvent
 {
@@ -14,7 +16,7 @@ public class LevelEvent
     public string eventName;
     //项目处于可交互状态才会交互
     public bool isTriggered;
-
+    public Transform restartPos;
     //item状态对
     public List<InteractiveItems> interactiveItems;
 
@@ -58,11 +60,14 @@ public class TaskManager : SingletonMonoBase<TaskManager>
 {
     //大关卡中有多少个小关卡，对应的关卡事件
     public List<LevelEvent> levelEvents;
+    public GameObject player;
     //下一个事件索引
     private int _nextEventIndex;
     private void Start()
     {
-        _nextEventIndex = 0;
+        _nextEventIndex = ArchiveSystem.LevelIndex;
+        ArchiveSystem.Init(this);
+        ArchiveSystem.LoadArchive(ArchiveSystem.LevelIndex,player.transform);
     }
 
     //接受广播
@@ -84,8 +89,13 @@ public class TaskManager : SingletonMonoBase<TaskManager>
             //执行事件后果
             EventCenter.Broadcast(GameEvent.TriggerLevelEvent, levelEvents[_nextEventIndex]);
             levelEvents[_nextEventIndex].onEventTriggered?.Invoke();
+            SaveArchive();
             _nextEventIndex++;
             EventCenter.Broadcast(GameEvent.ItemStateChangeEvent);
         }
+    }
+    private void SaveArchive()
+    {
+        ArchiveSystem.LevelIndex = _nextEventIndex;
     }
 }

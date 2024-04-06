@@ -8,7 +8,7 @@ public class Sketchman : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SketchUtility.Instance.SketchInit(spriteObject);
+        SketchUtility.Instance.SketchInit();
     }
 
     // Update is called once per frame

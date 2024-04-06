@@ -42,6 +42,7 @@ namespace ReflectiveProjectionDemo
                     if (isAnimObject)
                     {
                         gameObject.layer = 0;
+                        gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
                         GetComponent<AudioSource>().Play();
                         IEnumerator e = ObjDead();
                         StartCoroutine(e);

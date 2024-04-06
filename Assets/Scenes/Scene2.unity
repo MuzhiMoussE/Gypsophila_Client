@@ -58655,6 +58655,7 @@ MonoBehaviour:
   onGround: 1
   sketchmanDistance: 5
   isDead: 0
+  painted: 0
 --- !u!114 &3203942805934236194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58990,6 +58991,7 @@ MonoBehaviour:
   levelEvents:
   - eventName: level1
     isTriggered: 0
+    restartPos: {fileID: 0}
     interactiveItems:
     - {fileID: 339295345}
     onEventTriggered:
@@ -59021,6 +59023,7 @@ MonoBehaviour:
           m_CallState: 2
   - eventName: level1
     isTriggered: 0
+    restartPos: {fileID: 0}
     interactiveItems:
     - {fileID: 339295345}
     onEventTriggered:

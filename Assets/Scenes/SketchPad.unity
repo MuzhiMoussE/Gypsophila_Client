@@ -582,10 +582,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -593,7 +593,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: "\u753B\u5B8C\u4E86\uFF01"
 --- !u!222 &900180535
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -810,6 +810,7 @@ GameObject:
   - component: {fileID: 1038512682}
   - component: {fileID: 1038512681}
   - component: {fileID: 1038512680}
+  - component: {fileID: 1038512683}
   - component: {fileID: 1038512679}
   m_Layer: 0
   m_Name: EventSystem
@@ -881,6 +882,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1038512683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038512678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e5173d5ec160e43880ccce2c742ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startListening: 0
 --- !u!1 &1125526416
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,7 +1155,7 @@ RectTransform:
   m_GameObject: {fileID: 2056235088}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.7788, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1962316715}
@@ -1149,8 +1163,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_AnchoredPosition: {x: -3.699997, y: -0.000002861023}
+  m_SizeDelta: {x: 22.11, y: -2.6828}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2056235090
 CanvasRenderer:

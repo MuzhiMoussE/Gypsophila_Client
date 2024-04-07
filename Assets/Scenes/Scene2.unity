@@ -8514,6 +8514,7 @@ Transform:
   - {fileID: 2037231155}
   - {fileID: 819346743}
   - {fileID: 1603149059}
+  - {fileID: 1368556178}
   m_Father: {fileID: 3203942806393137953}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -26427,6 +26428,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 39100bda460944844b592646465e355a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 194e9111af0c33840a49d573f2b26952, type: 3}
+--- !u!1 &965217335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2091687613549304919, guid: a5106d884e112ea47b8f4d607633af41, type: 3}
+  m_PrefabInstance: {fileID: 2143361999}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &965848117 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1490849379766892529, guid: b8217b9c1183a5144b666d1dd63980c4, type: 3}
@@ -35668,6 +35674,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8217b9c1183a5144b666d1dd63980c4, type: 3}
+--- !u!1 &1368556177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1368556178}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1368556178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368556177}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.5, y: 8, z: -3.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 298381059}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1368556875
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58655,7 +58692,6 @@ MonoBehaviour:
   onGround: 1
   sketchmanDistance: 5
   isDead: 0
-  painted: 0
 --- !u!114 &3203942805934236194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58893,7 +58929,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 15
+  m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
@@ -58991,39 +59027,7 @@ MonoBehaviour:
   levelEvents:
   - eventName: level1
     isTriggered: 0
-    restartPos: {fileID: 0}
-    interactiveItems:
-    - {fileID: 339295345}
-    onEventTriggered:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 298381060}
-          m_TargetAssemblyTypeName: LevelFinishEvent, Assembly-CSharp
-          m_MethodName: LevelFinishStateForSwitches
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 4
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 298381060}
-          m_TargetAssemblyTypeName: LevelFinishEvent, Assembly-CSharp
-          m_MethodName: SetNextCamera
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventName: level1
-    isTriggered: 0
-    restartPos: {fileID: 0}
+    restartPos: {fileID: 1368556178}
     interactiveItems:
     - {fileID: 339295345}
     onEventTriggered:
@@ -59053,6 +59057,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  player: {fileID: 965217335}
 --- !u!4 &3203942806393137953
 Transform:
   m_ObjectHideFlags: 0

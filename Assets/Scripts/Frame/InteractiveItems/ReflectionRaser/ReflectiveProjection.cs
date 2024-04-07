@@ -177,8 +177,6 @@ public class ReflectiveProjection : MonoBehaviour
                 _hitObjects.Add(hit.transform.gameObject);
 
             }
-
-            
             // if game object has a stop reflection layer
             if (stopReflectionLayers == (stopReflectionLayers | (1 << hit.transform.gameObject.layer))) {
                 Tuple tuple;
@@ -189,9 +187,10 @@ public class ReflectiveProjection : MonoBehaviour
                 _hitObjectsOfStopLayer.Add(hit.transform.gameObject);
                 if (hit.transform.gameObject.tag == Global.ItemTag.PLAYER)
                 {
-                    Debug.Log("HIT PLAYER!!!");
+                    //Debug.Log("HIT PLAYER!!!");
                     //击中player
                     hit.transform.gameObject.GetComponent<Player>().PlayerDead();
+                    
                 }
             }
         }

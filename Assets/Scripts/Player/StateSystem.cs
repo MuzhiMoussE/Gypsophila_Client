@@ -11,6 +11,7 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utility;
+using static Global;
 
 public class StateSystem : SingletonMonoBase<StateSystem>
 {
@@ -95,6 +96,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void ToSummon()
     {
+        if (interactObject == null) return;
         if (interactObject.tag == Global.ItemTag.PAINTER && !ArchiveSystem.painted)
         {
             
@@ -426,30 +428,32 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void CheckDead(GameObject player)
     {
-         if(player.transform.position.y < -30)
+         if(player.transform.position.y < -30 && !isDead)
          {
             DeadEvent(player);
-        }
+         }
     }
     public void DeadEvent(GameObject player)
     {
         isDead = true;  
-        playerState = Global.PlayerState.Die;
-        //Debug.Log(playerState);
-        AnimSystem.Instance.ChangeAnimState(playerState);
-        IEnumerator e = GameOver(player);
-        StartCoroutine(e);
+        StartCoroutine(GameOver(player));
         
     }
     IEnumerator GameOver(GameObject player)
     {
-        yield return new WaitForSeconds(5);
-        Time.timeScale = 0;
-        Debug.Log("Dead!");
+        playerState = Global.PlayerState.Die;
+        //Debug.Log(playerState);
+        AnimSystem.Instance.ChangeAnimState(playerState);
+        ArchiveSystem.restart = false;
+        yield return new WaitForSeconds(1);
+        //Time.timeScale = 0;
+        //sssDebug.Log("Dead!");
         //Application.Quit();
+        //Time.timeScale = 1;
         ArchiveSystem.LoadArchive(ArchiveSystem.LevelIndex, player.transform);
-        Time.timeScale = 1;
         isDead = false;
+        player.layer = 6;
+        yield return null;
     }
     IEnumerator ToIdle(float _second)
     {

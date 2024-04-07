@@ -115,8 +115,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d5e744452c1524982192ff81eda7c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerObj: {fileID: 0}
   camLast: {fileID: 0}
   camNext: {fileID: 0}
+  cam: {fileID: 0}
+  _color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &661683522641319443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,6 +417,10 @@ PrefabInstance:
     - target: {fileID: 7086755006912497623, guid: e3fc81a7e99f0b94ead3b793205f4667, type: 3}
       propertyPath: reflectiveLayers.m_Bits
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7086755006912497623, guid: e3fc81a7e99f0b94ead3b793205f4667, type: 3}
+      propertyPath: stopReflectionLayers.m_Bits
+      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3fc81a7e99f0b94ead3b793205f4667, type: 3}

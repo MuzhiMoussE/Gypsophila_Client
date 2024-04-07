@@ -65,9 +65,14 @@ public class TaskManager : SingletonMonoBase<TaskManager>
     private int _nextEventIndex;
     private void Start()
     {
-        _nextEventIndex = ArchiveSystem.LevelIndex;
+        if(ArchiveSystem.LevelIndex!=-1)
+        {
+            _nextEventIndex = ArchiveSystem.LevelIndex;
+
+        }
         ArchiveSystem.Init(this);
-        ArchiveSystem.LoadArchive(ArchiveSystem.LevelIndex,player.transform);
+        ArchiveSystem.LoadArchive(ArchiveSystem.LevelIndex, player.transform);
+
     }
 
     //Ω” ‹π„≤•

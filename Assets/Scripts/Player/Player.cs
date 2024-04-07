@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
     public void PlayerDead()
     {
         StateSystem.Instance.DeadEvent(_player);
+        _player.layer = 0;
     }
 
 }

@@ -13,6 +13,7 @@ public class SketchUtility : SingletonMonoBase<SketchUtility>
     //Í¼Æ¬ÐòÁÐ->sprite¶¯»­
 
     [SerializeField]private float frame_number = 15;
+    [SerializeField] private GameObject sketchman;
     private List<Sprite> sprites = new List<Sprite>();
     private SpriteRenderer sketchmanRenderer;
 
@@ -25,8 +26,6 @@ public class SketchUtility : SingletonMonoBase<SketchUtility>
 
     private void SetInit()
     {
-        GameObject sketchman = GameObject.FindGameObjectWithTag(Global.ItemTag.SKETCH_MAN);
-        Debug.Log(sketchman.name);
         sketchmanRenderer = sketchman.GetComponentInChildren<SpriteRenderer>();
         _time = 0;
         index = 0;

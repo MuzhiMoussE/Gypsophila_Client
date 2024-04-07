@@ -14,7 +14,7 @@ public static class ArchiveSystem
     public static bool painted = false;
     public static TaskManager currentTasks;
     public static int SceneIndex = 1;
-    public static int LevelIndex = 0;
+    public static int LevelIndex = -1;
     public static Transform playerPos;
     private static Transform[] restartPos;
     public static bool restart = true;
@@ -45,23 +45,31 @@ public static class ArchiveSystem
         //需要一个全局函数获得player
         //LoadArchive(LevelIndex,player);
     }
-    public static  void LoadArchive(int levelindex,Transform player)
+    public static void LoadArchive(int levelindex,Transform player)
     {
-        Debug.Log("Current level:" + levelindex);
-        //playerPos = player.transform;
-        for (int i = 0; i < levelindex; i++)
+        StateSystem.Instance.playerState = PlayerState.Idle;
+        AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
+        Debug.Log("Current level:" + levelindex+"Restart:"+restart);
+        if(levelindex == -1)
         {
-            currentTasks.levelEvents[i].isTriggered = true;
+            player.position = restartPos[0].position;
         }
-        if(restart) player.position = restartPos[levelindex].position;
         else
         {
-            player.position = restartPos[levelindex+1].position;
-            StateSystem.Instance.playerState = PlayerState.Idle;
-            AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
-            restart = true;
-            SketchUtility.Instance.SketchInit();
+            //playerPos = player.transform;
+            for (int i = 0; i < levelindex; i++)
+            {
+                currentTasks.levelEvents[i].isTriggered = true;
+            }
+            if (restart) player.position = restartPos[levelindex].position;
+            else
+            {
+                player.position = restartPos[levelindex + 1].position;
+                restart = true;
+            }
         }
+        SketchUtility.Instance.SketchInit();
+
     }
     public static void LoadScene(int index)
     {

@@ -33,11 +33,11 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     private float intervalTime = 0.5f;//大于这个时间判定为长按
     private float recordTime = 1f;//按满1s触发长按事件
     
-    private bool longPress = false;
+    [SerializeField]private bool longPress = false;
     private int direction = 0;
     private bool interactTrigger = false;
     private Stack<GameObject> interactStack = new Stack<GameObject>();
-    private GameObject interactObject = null;
+    public  GameObject interactObject = null;
     private bool getBox = false;
     private GameObject box = null;
     public void InputListener(GameObject player,Rigidbody player_rd,GameObject sketchman)
@@ -46,7 +46,6 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         {
             //暂停
             Time.timeScale = 0;
-            
         }
         else if(Input.GetKeyDown(KeyCode.Q))
         {
@@ -62,8 +61,8 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             
             if(!longPress)
             {
+                //Debug.Log("NOT LONG PRESS!");
                 ShortPressFunction(sketchman, player);
-                
             }
             else if(timer < recordTime)
             {
@@ -102,7 +101,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             
             playerState = Global.PlayerState.ToSummon;
             AnimSystem.Instance.ChangeAnimState(playerState);
-            Debug.Log("召唤跳转！");
+           // Debug.Log("召唤跳转！");
             ArchiveSystem.painted = true;
             IEnumerator e = ToIdle(5);
             StartCoroutine(e);
@@ -138,7 +137,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         AnimSystem.Instance.ChangeAnimState(playerState);
         SketchSystem.Instance.StartRecordingAction();
         recordingTimeSlider.GameObject().SetActive(true);
-        Debug.Log("开始记录！");
+        //Debug.Log("开始记录！");
         timer = 0;//复位
         recordSlider.value = 0;
         IEnumerator coroutine = Recorder();
@@ -152,8 +151,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
         SketchSystem.Instance.ReleasingAction(sketchman);
         //释放纸人实体
-        IEnumerator e = ToIdle(1);
-        StartCoroutine(e);
+        StartCoroutine(ToIdle(1));
 
         ArchiveSystem.isRecorded = false;
         ArchiveSystem.painted = false;
@@ -182,15 +180,15 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         tipsText.gameObject.SetActive(true);
         if(_object.tag == Global.ItemTag.BOX)
         {
-            tipsText.text = "按下E键拿起/放下箱子";
+            tipsText.text = "按下E键拿起/放下";
         }
         else if(_object.tag == Global.ItemTag.SIGHT_SWITCH)
         {
-            tipsText.text = "按下E键/Q键转动视线";
+            tipsText.text = "按下E键/Q键转动";
         }
         else if (_object.tag == Global.ItemTag.PAINTER)
         {
-            tipsText.text = "按下S键使用画板";
+            tipsText.text = "按下S键使用";
         }
         else
         {
@@ -236,7 +234,9 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             }
             else if (interactStack.Contains(other.gameObject))
             {
+                interactStack.Pop();
                 interactObject = interactStack.Peek();
+                Debug.Log("interact now:" + interactObject.name);
             }
         }
     }
@@ -247,7 +247,8 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         if (timer >= intervalTime)//超过间隔时间也就是长按
         {
             longPress = true;
-            if (timer >= recordTime && !ArchiveSystem.isRecorded)//开启记录
+            //Debug.Log("LONG PRESS!");
+            if (timer >= recordTime)//开启记录
             {
                 Recording();
             }
@@ -308,22 +309,20 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     private void ShortPressFunction(GameObject sketchman,GameObject player)
     {
-        if (timer < intervalTime)
+        timer = 0f;//复位
+        recordSlider.value = 0;
+        if (interactTrigger) InteractFunction();
+        else
         {
-            timer = 0f;//复位
-            recordSlider.value = 0;
-            if (interactTrigger) InteractFunction();
+            Debug.Log("ISRECORDED:" + ArchiveSystem.isRecorded + " ISPAINTED:" + ArchiveSystem.painted);
+            if (ArchiveSystem.isRecorded && ArchiveSystem.painted)
+            {
+                Debug.Log("Start Releasing!");
+                ReleaseFunction(sketchman, player);
+            }
             else
             {
-                if (ArchiveSystem.isRecorded && ArchiveSystem.painted)
-                {
-                    Debug.Log("Start Releasing!");
-                    ReleaseFunction(sketchman, player);
-                }
-                else
-                {
-                    Debug.Log("无记录或未绘画！");
-                }
+                Debug.Log("无记录或未绘画！");
             }
         }
     }
@@ -408,7 +407,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             MoveLeftFunction(player);
             OnMoingFunction();
         }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             MoveRightFunction(player);
             OnMoingFunction();

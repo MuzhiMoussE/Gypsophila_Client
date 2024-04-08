@@ -45,11 +45,15 @@ public static class ArchiveSystem
         //需要一个全局函数获得player
         //LoadArchive(LevelIndex,player);
     }
+    public static void PrintLevelState(int levelindex)
+    {
+        Debug.Log("Current level:" + levelindex + " Restart:" + restart + " Recorded? " + isRecorded + " Painted? " + painted);
+    }
     public static void LoadArchive(int levelindex,Transform player)
     {
         StateSystem.Instance.playerState = PlayerState.Idle;
         AnimSystem.Instance.ChangeAnimState(StateSystem.Instance.playerState);
-        Debug.Log("Current level:" + levelindex+"Restart:"+restart);
+        PrintLevelState(levelindex);
         if(levelindex == -1)
         {
             player.position = restartPos[0].position;

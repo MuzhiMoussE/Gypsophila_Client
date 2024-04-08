@@ -3381,7 +3381,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411723031}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 131.1, y: 2.62, z: 1.09}
+  m_LocalPosition: {x: 133.62, y: 2.62, z: 1.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16184,6 +16184,7 @@ MonoBehaviour:
   onGround: 1
   sketchmanDistance: 5
   isDead: 0
+  longPress: 0
 --- !u!114 &2043212962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16273,6 +16274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frame_number: 15
+  sketchman: {fileID: 646204079}
   onCompleteEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -17326,6 +17328,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 88560242129706584, guid: 27e662cd91ad0294b8bff927ff2493ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -103
+      objectReference: {fileID: 0}
+    - target: {fileID: 88560242129706584, guid: 27e662cd91ad0294b8bff927ff2493ac, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 49
+      objectReference: {fileID: 0}
+    - target: {fileID: 88560242129706589, guid: 27e662cd91ad0294b8bff927ff2493ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 88560242923792572, guid: 27e662cd91ad0294b8bff927ff2493ac, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -17570,10 +17584,6 @@ PrefabInstance:
     - target: {fileID: 661683522641319454, guid: dfc9dc5810a28a346a2c4b1b6cb6462b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7743925857107756580, guid: dfc9dc5810a28a346a2c4b1b6cb6462b, type: 3}
-      propertyPath: stopReflectionLayers.m_Bits
-      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 661683522641319442, guid: dfc9dc5810a28a346a2c4b1b6cb6462b, type: 3}

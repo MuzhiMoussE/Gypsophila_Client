@@ -11,9 +11,12 @@ using System.Threading;
 using UnityEngine.SceneManagement;
 using System.Runtime.CompilerServices;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class SketchReceiver : SingletonMonoBase<SketchReceiver>
 {
+    public Image loading;
+    public bool startLoading = false;
     private int frameCnt = 0;
     public bool startListening = false;
     private TcpListener _listener;
@@ -108,6 +111,7 @@ public class SketchReceiver : SingletonMonoBase<SketchReceiver>
 
         //tcpClient.Close();
         Debug.Log("ClientClose!");
+
         canClose = true;
     }
     public void CloseListener()
@@ -121,5 +125,7 @@ public class SketchReceiver : SingletonMonoBase<SketchReceiver>
         //ArchiveSystem archivesystem = FindObjectOfType<ArchiveSystem>();
         ArchiveSystem.restart = false;
         ArchiveSystem.ReturnScene();
+        startLoading = false;
+        loading.gameObject.SetActive(false);
     }
  }

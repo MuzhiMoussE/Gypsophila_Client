@@ -13,6 +13,7 @@ public class Sketch: MonoBehaviour
 {
     private Texture2D screenShot;
     public Button button;
+    private float speed = 100;
     LineRenderer line;
     Material mat;
     public Slider slider;
@@ -60,6 +61,10 @@ public class Sketch: MonoBehaviour
 
             }
         }
+        if(SketchReceiver.Instance.startLoading)
+        {
+            SketchReceiver.Instance.loading.transform.Rotate(new Vector3(0,0,Time.deltaTime*speed));
+        }
     }
     public void FinishDrawing()
     {
@@ -69,6 +74,8 @@ public class Sketch: MonoBehaviour
     }
     IEnumerator FinishScreenShot()
     {
+        SketchReceiver.Instance.startLoading = true;
+        SketchReceiver.Instance.loading.gameObject.SetActive(true);
         string image = Application.streamingAssetsPath + "/ScreenShot/screenshot" + ArchiveSystem.sketchCnt.ToString() + ".png";
         ScreenCapture.CaptureScreenshot(Application.streamingAssetsPath + "/ScreenShot/screenshot" + ArchiveSystem.sketchCnt.ToString() + ".png");
         yield return new WaitForSeconds(1);

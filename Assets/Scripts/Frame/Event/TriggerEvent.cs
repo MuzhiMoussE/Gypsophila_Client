@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 public class TriggerEvent : MonoBehaviour
 {
+    public GameObject storyObject;
     public GameObject triggerObj;
     public GameObject camLast;
     public GameObject camNext;
@@ -54,5 +56,10 @@ public class TriggerEvent : MonoBehaviour
         ArchiveSystem.ClearLevel();
         ArchiveSystem.SceneIndex++;
         ArchiveSystem.LoadScene(ArchiveSystem.SceneIndex);
+    }
+    public void StartStory()
+    {
+        storyObject.SetActive(true);
+        storyObject.GetComponent<PlayableDirector>().Play();
     }
 }

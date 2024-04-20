@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using static UnityEngine.GraphicsBuffer;
 
 public class LevelFinishEvent : MonoBehaviour

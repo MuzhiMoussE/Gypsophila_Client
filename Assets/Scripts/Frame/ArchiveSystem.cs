@@ -19,6 +19,16 @@ public static class ArchiveSystem
     private static Transform[] restartPos;
     public static bool restart = true;
     public static int sketchCnt = 0;
+    public static void ClearLevel()
+    {
+        isRecorded = false;
+        painted = false;
+        currentTasks = null;
+        LevelIndex = -1;
+        restartPos.Initialize();
+        restart = true;
+        sketchCnt = 0;
+    }
     public static void Init(TaskManager tasks)
     {
         ResetSystemForScene(tasks);
@@ -36,14 +46,6 @@ public static class ArchiveSystem
         {
             restartPos[i] = currentTasks.levelEvents[i].restartPos;
         }
-    }
-    public static  void ReturnScene()
-    {
-        //StartCoroutine(LoadScene(SceneIndex));
-        //asyncLoad.allowSceneActivation = true;
-        LoadScene(SceneIndex);
-        //需要一个全局函数获得player
-        //LoadArchive(LevelIndex,player);
     }
     public static void PrintLevelState(int levelindex)
     {
@@ -79,6 +81,6 @@ public static class ArchiveSystem
     {
         SceneIndex = index;
         //获取加载对象
-        SceneManager.LoadSceneAsync(index);
+        SceneManager.LoadScene(index);
     }
 }

@@ -1,7 +1,10 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TriggerEvent : MonoBehaviour
 {
@@ -37,5 +40,19 @@ public class TriggerEvent : MonoBehaviour
     public void SetTriggerObjDown()
     {
         triggerObj.GetComponent<Rigidbody>().isKinematic = false;
+    }
+    public void SetAnimPlay2()
+    {
+        triggerObj.GetComponent<Animator>().SetBool("Play2", true);
+    }
+    public void ObjectAppear()
+    {
+        triggerObj.SetActive(true);
+    }
+    public void ToNextScene()
+    {
+        ArchiveSystem.ClearLevel();
+        ArchiveSystem.SceneIndex++;
+        ArchiveSystem.LoadScene(ArchiveSystem.SceneIndex);
     }
 }

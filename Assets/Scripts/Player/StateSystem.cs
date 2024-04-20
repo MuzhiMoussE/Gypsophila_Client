@@ -1,3 +1,4 @@
+using Cinemachine;
 using Frame;
 using JetBrains.Annotations;
 using System.Collections;
@@ -32,7 +33,6 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     private float timer = 0f;
     private float intervalTime = 0.5f;//大于这个时间判定为长按
     private float recordTime = 1f;//按满1s触发长按事件
-    
     [SerializeField]private bool longPress = false;
     private int direction = 0;
     private bool interactTrigger = false;
@@ -105,7 +105,11 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             ArchiveSystem.painted = true;
             IEnumerator e = ToIdle(5);
             StartCoroutine(e);
-            SceneManager.LoadScene(4);
+            interactObject.GetComponent<Painter>().paintPlane.GetComponentInChildren<CinemachineVirtualCamera>().Priority = 20;
+            //paintPlane.SetActive(true);
+            interactObject.GetComponent<Painter>().paintPlane.GetComponent<Sketch>().Init();
+            interactObject.GetComponent<Painter>().paintPlane.GetComponent<SketchReceiver>().paintUI.SetActive(true);
+            //SceneManager.LoadScene(4);
             //StartCoroutine(LoadScene(4));
 
 
@@ -147,7 +151,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     {
         playerState = Global.PlayerState.Releasing;
         AnimSystem.Instance.ChangeAnimState(playerState);
-        Debug.Log("RELEASING");
+        //Debug.Log("RELEASING");
         //SketchSystem.Instance.CopyActionToSkecthMan(sketchman);
         SketchSystem.Instance.ReleasingAction(sketchman);
         //释放纸人实体
@@ -168,7 +172,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         ArchiveSystem.isRecorded = true;
         longPress = false;
         SketchSystem.Instance.StopRecordingAction();
-        Debug.Log("记录完成！");
+        //Debug.Log("记录完成！");
         playerState = Global.PlayerState.Idle;
         AnimSystem.Instance.ChangeAnimState(playerState);
         recordingTimeSlider.value = 0;
@@ -236,7 +240,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             {
                 interactStack.Pop();
                 interactObject = interactStack.Peek();
-                Debug.Log("interact now:" + interactObject.name);
+                //Debug.Log("interact now:" + interactObject.name);
             }
         }
     }
@@ -264,15 +268,19 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         AnimSystem.Instance.ChangeAnimState(playerState);
         IEnumerator e = ToIdle(1);
         StartCoroutine(e);
-        SightSwitch sightSwitch = interactObject.GetComponent<SightSwitch>();
-        sightSwitch.Interact(isClockwise) ;
+        if(interactObject.tag == Global.ItemTag.SIGHT_SWITCH)
+        {
+            SightSwitch sightSwitch = interactObject.GetComponent<SightSwitch>();
+            sightSwitch.Interact(isClockwise);
+        }
+
     }
     private void InteractFunction()
     {
         if (box!=null && !getBox)
         {
             getBox = true;
-            Debug.Log("GET BOX!");
+            //Debug.Log("GET BOX!");
             box.gameObject.GetComponent<Boxes>().dragged = true;
             box.gameObject.GetComponent<Rigidbody>().isKinematic = true;
             //box.gameObject.transform.position += new Vector3(0, 0.3f, 0);
@@ -282,7 +290,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         else if (box!=null && getBox)
         {
             getBox = false;
-            Debug.Log("THROW BOX!");
+            //Debug.Log("THROW BOX!");
             box.gameObject.GetComponent<Boxes>().dragged = false;
             box.gameObject.GetComponent<Rigidbody>().isKinematic=false;
             playerState = Global.PlayerState.Idle;
@@ -301,7 +309,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     private void ReleaseFunction(GameObject sketchman,GameObject player)
     {
-        Debug.Log("Start Releasing!");
+        //Debug.Log("Start Releasing!");
         Releasing(sketchman);
         sketchman.transform.position = player.transform.position + new Vector3(sketchmanDistance, 0, 0) * direction;
         sketchman.transform.position += new Vector3(0, 2, 0);
@@ -314,7 +322,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         if (interactTrigger) InteractFunction();
         else
         {
-            Debug.Log("ISRECORDED:" + ArchiveSystem.isRecorded + " ISPAINTED:" + ArchiveSystem.painted);
+            //Debug.Log("ISRECORDED:" + ArchiveSystem.isRecorded + " ISPAINTED:" + ArchiveSystem.painted);
             if (ArchiveSystem.isRecorded && ArchiveSystem.painted)
             {
                 Debug.Log("Start Releasing!");

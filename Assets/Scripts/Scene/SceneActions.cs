@@ -10,19 +10,20 @@ public class SceneActions : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        StartCoroutine(LoadScene(1));
-        ArchiveSystem.SceneIndex = 1;
+        ArchiveSystem.LoadScene(1);
+        //StartCoroutine(LoadScene(1));
+        //ArchiveSystem.SceneIndex = 1;
     }
     // Update is called once per frame
     private void OnEnable()
     {
-        asyncLoad.allowSceneActivation = true;
+        //asyncLoad.allowSceneActivation = true;
     }
     IEnumerator LoadScene(int index)
     {
         ArchiveSystem.SceneIndex = index;
         //获取加载对象
-        asyncLoad = SceneManager.LoadSceneAsync(index);
+        SceneManager.LoadSceneAsync(index);
         //设置加载完成后不跳转
         asyncLoad.allowSceneActivation = false;
 

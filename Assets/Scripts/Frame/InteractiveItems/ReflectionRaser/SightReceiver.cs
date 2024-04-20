@@ -8,6 +8,7 @@ namespace ReflectiveProjectionDemo
     public class SightReceiver : MonoBehaviour
     {
         public SightSwitch _switch;
+        public GameObject glass;
         // get the script
         public ReflectiveProjection script;
         public Material OverMaterial;
@@ -25,6 +26,7 @@ namespace ReflectiveProjectionDemo
                 gameObject.GetComponent<MeshRenderer>().material = OverMaterial;
                 if(_switch.state == ItemState.Off)
                 {
+                    glass.GetComponent<MeshRenderer>().material = OverMaterial;
                     _switch.state = ItemState.On;
                     EventCenter.Broadcast(GameEvent.ItemStateChangeEvent);
                 }

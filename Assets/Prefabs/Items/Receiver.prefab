@@ -31,7 +31,8 @@ Transform:
   m_LocalPosition: {x: 153, y: 6.94, z: 0}
   m_LocalScale: {x: 14.56458, y: 1.2446866, z: 10.03816}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5412295390960171617}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -50,7 +51,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 671635454104575919}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -111,5 +112,121 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _switch: {fileID: 0}
+  glass: {fileID: 4548551761743215657}
   script: {fileID: 0}
   OverMaterial: {fileID: 2100000, guid: 1b287375deb04bd4aa434a80189088ff, type: 2}
+--- !u!1 &4548551761743215657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5238898555050593343}
+  - component: {fileID: 6798744823521349299}
+  - component: {fileID: 2785862057365718745}
+  m_Layer: 0
+  m_Name: glass
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5238898555050593343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4548551761743215657}
+  m_LocalRotation: {x: -0.3113854, y: -0.17096695, z: 0.78505474, w: 0.5074432}
+  m_LocalPosition: {x: -0.0000001968689, y: 9.745905e-10, z: -0.0000005932743}
+  m_LocalScale: {x: 0.9999998, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5412295390960171617}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -177.273, y: 138.45801, z: -64.72101}
+--- !u!33 &6798744823521349299
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4548551761743215657}
+  m_Mesh: {fileID: 8245426573784773463, guid: 3c384acb209c4b344bae1c03449b5c5f, type: 3}
+--- !u!23 &2785862057365718745
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4548551761743215657}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9a841ee181c693f428b56d54c279dda3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8698798307017826263
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5412295390960171617}
+  m_Layer: 0
+  m_Name: glassContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5412295390960171617
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8698798307017826263}
+  m_LocalRotation: {x: 0.70173466, y: -0.10628898, z: 0.0864099, w: 0.69914556}
+  m_LocalPosition: {x: 0.038424134, y: 2.62, z: -0.21103999}
+  m_LocalScale: {x: 0.06865972, y: 0.09961985, z: 0.8034151}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5238898555050593343}
+  m_Father: {fileID: 671635454104575918}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 88.376, y: -105.253, z: -89.588}

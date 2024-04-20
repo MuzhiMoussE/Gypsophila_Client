@@ -25,6 +25,7 @@ public class LevelEvent
     //用来判断是否交互，如果交互成功返回true
     public bool CheckEvent()
     {
+        //Debug.Log("Check " + eventName + "!");
         if (isTriggered)
         {
             Debug.LogError("Event " + eventName + " is already triggered!");
@@ -102,6 +103,7 @@ public class TaskManager : SingletonMonoBase<TaskManager>
     private void SaveArchive()
     {
         ArchiveSystem.LevelIndex = _nextEventIndex;
+        //Debug.Log("LevelFinish: " + ArchiveSystem.LevelIndex);
     }
 
 

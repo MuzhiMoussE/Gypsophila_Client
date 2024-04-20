@@ -12,9 +12,11 @@ using UnityEngine.SceneManagement;
 using System.Runtime.CompilerServices;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class SketchReceiver : SingletonMonoBase<SketchReceiver>
 {
+    public GameObject paintUI;
     public Image loading;
     public bool startLoading = false;
     private int frameCnt = 0;
@@ -121,11 +123,14 @@ public class SketchReceiver : SingletonMonoBase<SketchReceiver>
         client.Close();
         _listener.Stop();
         startListening = false;
-        //ArchiveSystem.sketchCnt++;
+        ArchiveSystem.sketchCnt++;
         //ArchiveSystem archivesystem = FindObjectOfType<ArchiveSystem>();
-        ArchiveSystem.restart = false;
-        ArchiveSystem.ReturnScene();
+        //ArchiveSystem.restart = false;
+        //ArchiveSystem.ReturnScene();
         startLoading = false;
         loading.gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        gameObject.GetComponentInChildren<CinemachineVirtualCamera>().Priority = 10;
+        paintUI.SetActive(false);
     }
  }

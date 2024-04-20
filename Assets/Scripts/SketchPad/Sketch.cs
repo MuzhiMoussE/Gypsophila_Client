@@ -11,19 +11,21 @@ using System.Threading;
 
 public class Sketch: MonoBehaviour
 {
-    private Texture2D screenShot;
     public Button button;
-    private float speed = 100;
-    LineRenderer line;
-    Material mat;
     public Slider slider;
-    int num = 0;//总共画画点数
-    Color c;
+    private Texture2D screenShot;
+    private float speed = 100;
+    private LineRenderer line;
+    private Material mat;
+    
+    private int num = 0;//总共画画点数
+    private Color c;
     private Socket socket = null;
     private IPEndPoint endPoint = null;
     private byte[] buffer;
+    private bool startPainting = false;
     // Use this for initialization
-    void Start()
+    public void Init()
     {
         slider.value = 0.1f;
         //实例化一张带透明通道大小为256*256的贴图
@@ -31,34 +33,38 @@ public class Sketch: MonoBehaviour
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9999);
         socket.Connect(endPoint);
+        startPainting = true;
     }
     // Update is called once per frame
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if(startPainting)
         {
-            if (Input.GetMouseButtonDown(0))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                if (c == null)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    return;
+                    if (c == null)
+                    {
+                        return;
+                    }
+                    GameObject obj = new GameObject();
+                    line = obj.AddComponent<LineRenderer>();
+                    line.material.color = c;
+                    line.widthMultiplier = slider.value;//宽度
+                    line.SetPosition(0, hit.point);
+                    line.SetPosition(1, hit.point);
+                    num = 0;
                 }
-                GameObject obj = new GameObject();
-                line = obj.AddComponent<LineRenderer>();
-                line.material.color = c;
-                line.widthMultiplier = slider.value;//宽度
-                line.SetPosition(0, hit.point);
-                line.SetPosition(1, hit.point);
-                num = 0;
-            }
-            if (Input.GetMouseButton(0))
-            {
-                num++;
-                line.positionCount = num;
-                line.SetPosition(num - 1, hit.point + new Vector3(0,0,-0.2f));
+                if (Input.GetMouseButton(0))
+                {
+                    num++;
+                    line.positionCount = num;
+                    line.SetPosition(num - 1, hit.point + new Vector3(0, 0, -0.002f));
 
+                }
             }
         }
         if(SketchReceiver.Instance.startLoading)
@@ -68,9 +74,7 @@ public class Sketch: MonoBehaviour
     }
     public void FinishDrawing()
     {
-        
-        IEnumerator e = FinishScreenShot();
-        StartCoroutine(e);
+        StartCoroutine(FinishScreenShot());
     }
     IEnumerator FinishScreenShot()
     {
@@ -81,16 +85,14 @@ public class Sketch: MonoBehaviour
         yield return new WaitForSeconds(1);
         SendImage(image);
     }
-
-
     private void SendImage(string fileName)
     {
+        startPainting = false;
         if (!File.Exists(fileName))
         {
             Debug.Log("File does not exist: " + fileName);
             return;
         }
-
         byte[] bt;
         using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
         {
@@ -98,14 +100,11 @@ public class Sketch: MonoBehaviour
             bt = new byte[fs.Length];
             strread.Read(bt, 0, bt.Length);
         }
-
         SocketAsyncEventArgs sendEventArgs = new SocketAsyncEventArgs();
         sendEventArgs.RemoteEndPoint = endPoint;
         sendEventArgs.SetBuffer(bt, 0, bt.Length);
-
         socket.SendAsync(sendEventArgs);
         Debug.Log("Send Over!");
-
         socket.Close();
         SketchReceiver.Instance.startListening = true;
     }

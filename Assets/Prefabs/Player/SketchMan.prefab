@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3920670296080676923}
   m_Layer: 0
   m_Name: MatCap_0
-  m_TagString: Untagged
+  m_TagString: SketchMan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,11 +100,11 @@ GameObject:
   - component: {fileID: 3920670297017656747}
   m_Layer: 0
   m_Name: SketchMan
-  m_TagString: Untagged
+  m_TagString: SketchMan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3920670297017656748
 Transform:
   m_ObjectHideFlags: 0
@@ -182,8 +182,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.4333767
-  m_Center: {x: 0, y: 0, z: -0.93337667}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3920670297017656736
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -83,4 +83,12 @@ public static class ArchiveSystem
         //获取加载对象
         SceneManager.LoadScene(index);
     }
+    public static void StoreLocalArchive()
+    {
+
+    }
+    public static void LoadLocalArchive()
+    {
+
+    }
 }

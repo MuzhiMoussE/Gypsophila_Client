@@ -5,6 +5,7 @@ using Utility;
 
 public class AudioManager : SingletonMonoBase<AudioManager>
 {
+    public float fxVolume = 1f;
     [SerializeField]private AudioClip Moving;
     [SerializeField] private AudioClip Jumping;
     [SerializeField] private AudioClip ToSummon;
@@ -30,6 +31,7 @@ public class AudioManager : SingletonMonoBase<AudioManager>
             audioSource.clip = Moving;
             audioSource.loop = true;
             audioSource.pitch = 1f;
+            audioSource.volume = fxVolume;
             audioSource.Play();
         }
         else if( state == Global.PlayerState.Jumping)
@@ -37,6 +39,7 @@ public class AudioManager : SingletonMonoBase<AudioManager>
             audioSource.clip = Jumping;
             audioSource.loop = false;
             audioSource.pitch = 1f;
+            audioSource.volume = fxVolume;
             audioSource.Play();
         }
         else if(state == Global.PlayerState.Dragging)
@@ -44,6 +47,7 @@ public class AudioManager : SingletonMonoBase<AudioManager>
             audioSource.clip = Dragging;
             audioSource.loop = true;
             audioSource.pitch = 1.67f;
+            audioSource.volume = fxVolume;
             audioSource.Play();
         }
         else if(state == Global.PlayerState.Die)
@@ -51,6 +55,7 @@ public class AudioManager : SingletonMonoBase<AudioManager>
             audioSource.clip = Die;
             audioSource.loop = false;
             audioSource.pitch = 1f;
+            audioSource.volume = fxVolume;
             audioSource.Play();
         }
     }

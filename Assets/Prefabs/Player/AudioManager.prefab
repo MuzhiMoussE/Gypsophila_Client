@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ee3a655cc415344b613ef8f4a7be00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fxVolume: 1
   Moving: {fileID: 8300000, guid: ac6649006dbee9e4685752e124111da7, type: 3}
   Jumping: {fileID: 8300000, guid: 8802544ed0324a14095edc70ab3bbab1, type: 3}
   ToSummon: {fileID: 0}

@@ -16,6 +16,7 @@ using static Global;
 
 public class StateSystem : SingletonMonoBase<StateSystem>
 {
+    public bool canInput = true;
     public Global.PlayerState playerState = Global.PlayerState.Idle;
     public Slider recordSlider;
     public Slider recordingTimeSlider;
@@ -42,11 +43,21 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     private GameObject box = null;
     public void InputListener(GameObject player,Rigidbody player_rd,GameObject sketchman)
     {
+        
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             //ÔÝÍ£
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
+            if(canInput)
+            {
+                FindObjectOfType<Canvas>().GetComponent<CanvasFunctions>().PauseButton();
+            }
+            else
+            {
+                FindObjectOfType<Canvas>().GetComponent<CanvasFunctions>().PauseButton();
+            }
         }
+        if (!canInput) return;
         else if(Input.GetKeyDown(KeyCode.Q))
         {
             RotateReleaser(false);

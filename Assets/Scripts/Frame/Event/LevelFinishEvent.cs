@@ -84,7 +84,7 @@ public class LevelFinishEvent : MonoBehaviour
     IEnumerator releaserDisappear()
     {
         sightReleaser.GetComponent<Animator>().SetBool("Disappear", true);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3f);
         sightReleaser.SetActive(false);
     }
 }

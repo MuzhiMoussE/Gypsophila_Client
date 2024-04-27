@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LevelSwitch : InteractiveItems
 {
@@ -13,7 +14,7 @@ public class LevelSwitch : InteractiveItems
     private List<GameObject> in_items = new List<GameObject>();
     private float downDistance = 0.4f;
     private AudioSource audioSource;
-
+    public UnityEvent _event;
     private void OnTriggerEnter(Collider other)
     {
         if (finishLevel) return;
@@ -65,6 +66,10 @@ public class LevelSwitch : InteractiveItems
         state = ItemState.On;
         audioSource.Play();
         EventCenter.Broadcast(GameEvent.ItemStateChangeEvent);
+        if(_event!=null)
+        {
+            _event.Invoke();
+        }
     }
     public void SwitchOffEvent()
     {

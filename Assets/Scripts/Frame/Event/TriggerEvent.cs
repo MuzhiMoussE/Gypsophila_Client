@@ -15,6 +15,8 @@ public class TriggerEvent : MonoBehaviour
     public GameObject camNext;
     public Camera cam;
     public Color _color;
+    public AudioSource audioSource;
+    public AudioClip clip;
     // Start is called before the first frame update
     public void SetNextCamera()
     {
@@ -47,6 +49,10 @@ public class TriggerEvent : MonoBehaviour
     {
         triggerObj.GetComponent<Animator>().SetBool("Play2", true);
     }
+    public void SetAnimPlay()
+    {
+        triggerObj.GetComponent<Animator>().SetBool("Play", true);
+    }
     public void ObjectAppear()
     {
         triggerObj.SetActive(true);
@@ -61,5 +67,31 @@ public class TriggerEvent : MonoBehaviour
     {
         storyObject.SetActive(true);
         storyObject.GetComponent<PlayableDirector>().Play();
+    }
+    public void TipsDisappear()
+    {
+        StateSystem.Instance.showTips = false;
+    }
+    public void TipsAppear()
+    {
+        StateSystem.Instance.showTips = true;
+    }
+    public void SetTip(string text)
+    {
+        StateSystem.Instance.tipsText.text = text;
+    }
+    public void PlayAudio()
+    {
+        audioSource.PlayOneShot(clip);
+    }
+    public void stopMom()
+    {
+        triggerObj.GetComponent<Mom>().canWalk = false;
+        triggerObj.GetComponent<Mom>().isWalking = false;
+        triggerObj.GetComponent<Animator>().SetBool("mom_thank", true);
+    }
+    public void DeleteObj()
+    {
+        Destroy(triggerObj);
     }
 }

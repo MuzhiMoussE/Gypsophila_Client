@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -22,7 +23,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public Slider recordingTimeSlider;
     public Text tipsText;
     public bool showTips;
-    public float recordingTime = 5f;//记录存取时间
+    public float recordingTime = 10f;//记录存取时间
     public float moveSpeed = 6f;
     public float jumpForce;
     private float jumpMaxTime = 0.2f;
@@ -116,6 +117,8 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             ArchiveSystem.painted = true;
             IEnumerator e = ToIdle(5);
             StartCoroutine(e);
+            //showTips = false;
+            tipsText.text = "";
             interactObject.GetComponent<Painter>().paintPlane.GetComponentInChildren<CinemachineVirtualCamera>().Priority = 20;
             //paintPlane.SetActive(true);
             interactObject.GetComponent<Painter>().paintPlane.GetComponent<Sketch>().Init();
@@ -148,6 +151,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void Recording()
     {
+        if (interactObject == null || interactObject.tag != ItemTag.RECORDER) return;
         playerState = Global.PlayerState.Recording;
         AnimSystem.Instance.ChangeAnimState(playerState);
         SketchSystem.Instance.StartRecordingAction();
@@ -205,9 +209,13 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         {
             tipsText.text = "按下S键使用";
         }
+        else if(_object.tag == ItemTag.RECORDER)
+        {
+            tipsText.text = "长按E键开始记录玩家行为";
+        }
         else
         {
-            tipsText.text = "";
+            //tipsText.text = "";
         }
     }
     private void CloseTips()
@@ -257,6 +265,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     private void LongOrShortPressFunction()
     {
+        
         timer += Time.deltaTime;
         //此处只检测长按逻辑
         if (timer >= intervalTime)//超过间隔时间也就是长按
@@ -279,7 +288,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         AnimSystem.Instance.ChangeAnimState(playerState);
         IEnumerator e = ToIdle(1);
         StartCoroutine(e);
-        if(interactObject.tag == Global.ItemTag.SIGHT_SWITCH)
+        if(interactObject.tag == ItemTag.SIGHT_SWITCH)
         {
             SightSwitch sightSwitch = interactObject.GetComponent<SightSwitch>();
             sightSwitch.Interact(isClockwise);
@@ -333,6 +342,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         if (interactTrigger) InteractFunction();
         else
         {
+
             //Debug.Log("ISRECORDED:" + ArchiveSystem.isRecorded + " ISPAINTED:" + ArchiveSystem.painted);
             if (ArchiveSystem.isRecorded && ArchiveSystem.painted)
             {
@@ -468,6 +478,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         //sssDebug.Log("Dead!");
         //Application.Quit();
         //Time.timeScale = 1;
+        SceneManager.LoadScene(ArchiveSystem.SceneIndex);
         ArchiveSystem.LoadArchive(ArchiveSystem.LevelIndex, player.transform);
         isDead = false;
         player.layer = 6;

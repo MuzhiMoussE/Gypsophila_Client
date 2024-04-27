@@ -132,5 +132,10 @@ public class SketchReceiver : SingletonMonoBase<SketchReceiver>
         //gameObject.SetActive(false);
         gameObject.GetComponentInChildren<CinemachineVirtualCamera>().Priority = 10;
         paintUI.SetActive(false);
+        LineRenderer lr = GetComponent<LineRenderer>();
+        if (lr!=null)
+        {
+            lr.positionCount = 0;
+        }
     }
  }

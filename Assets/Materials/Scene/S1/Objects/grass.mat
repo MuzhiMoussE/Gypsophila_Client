@@ -95,7 +95,7 @@ Material:
     - _BladeWidthRandom: 0.05
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _Density: 3.2
+    - _Density: 11
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _FadeDistanceEnd: 26

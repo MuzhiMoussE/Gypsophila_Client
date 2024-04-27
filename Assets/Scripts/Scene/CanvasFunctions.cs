@@ -25,7 +25,7 @@ public class CanvasFunctions : MonoBehaviour
             pauseButton.image.sprite = pause2;
             pauseMenu.SetActive(true);
             isPaused = true;
-            Time.timeScale = 0f;
+            Time.timeScale = 0.05f;
             StateSystem.Instance.canInput = false;
         }
         else
@@ -42,6 +42,7 @@ public class CanvasFunctions : MonoBehaviour
     {
         isPaused = false;
         Time.timeScale = 1f;
+        ArchiveSystem.StoreLocalArchive();
         SceneManager.LoadScene(0);
     }
     public void ToSettings()

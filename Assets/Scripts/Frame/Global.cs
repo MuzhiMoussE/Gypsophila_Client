@@ -61,6 +61,8 @@ public class Global
         public static string SKETCH_MAN = "SketchMan";
         public static string PAINTER = "Painter";
         public static string TRAP = "Trap";
+        public static string RECORDER = "Recorder";
+        public static string TEXT_TRIGGER = "TextTrigger";
     }
 
 }

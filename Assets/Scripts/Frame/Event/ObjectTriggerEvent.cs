@@ -5,7 +5,9 @@ using UnityEngine.Events;
 
 public class ObjectTriggerEvent : MonoBehaviour
 {
+    public bool untrigger = true;
     public UnityEvent _event;
+    public bool canDisappear = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,11 +21,19 @@ public class ObjectTriggerEvent : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (!untrigger) return;
         if (other.tag == Global.ItemTag.PLAYER)
         {
             _event.Invoke();
+            untrigger = false;
+            if(canDisappear) StartCoroutine(triggerDisappear());
 
         }
         
+    }
+    IEnumerator triggerDisappear()
+    {
+        yield return new WaitForSeconds(3);
+        gameObject.SetActive(false);
     }
 }

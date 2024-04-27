@@ -32,7 +32,9 @@ public class Player : MonoBehaviour
     {
         if(other.tag == Global.ItemTag.SIGHT_SWITCH || 
             other.tag == Global.ItemTag.BOX || 
-            other.tag == Global.ItemTag.PAINTER)
+            other.tag == Global.ItemTag.PAINTER ||
+            other.tag == Global.ItemTag.RECORDER ||
+            other.tag == Global.ItemTag.TEXT_TRIGGER)
         {
             StateSystem.Instance.InteractTriggerEnter(other);
             
@@ -42,7 +44,9 @@ public class Player : MonoBehaviour
     {
         if (other.tag == Global.ItemTag.SIGHT_SWITCH || 
             other.tag == Global.ItemTag.BOX || 
-            other.tag == Global.ItemTag.PAINTER)
+            other.tag == Global.ItemTag.PAINTER ||
+            other.tag == Global.ItemTag.RECORDER ||
+            other.tag == Global.ItemTag.TEXT_TRIGGER)
         {
             StateSystem.Instance.InteractTriggerExit(other);
         }

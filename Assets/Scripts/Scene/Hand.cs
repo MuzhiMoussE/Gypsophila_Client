@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class Hand : MonoBehaviour
 {
+    public bool isStatic = false;
     public GameObject player;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private float moveSpeed = 8f;
     private Animator animator;
-    private bool canMove = false;
+    public bool canMove = false;
+    [SerializeField] private GameObject handmove;
     // Start is called before the first frame update
     void OnEnable()
     {
@@ -34,6 +37,10 @@ public class Hand : MonoBehaviour
         {
             PlayerEnter();
         }
+        if(other.tag == Global.ItemTag.SKETCH_MAN)
+        {
+            SketchEnter();
+        }
     }
     private void OnTriggerExit(Collider other)
     {
@@ -47,6 +54,10 @@ public class Hand : MonoBehaviour
         animator.SetBool("attack1", false);
         animator.SetBool("attack2", false);
     }
+    private void SketchEnter()
+    {
+        HandDie();
+    }
     private void PlayerEnter()
     {
         int num = Random.Range(0, 2);
@@ -57,13 +68,15 @@ public class Hand : MonoBehaviour
     }
     private void Move()
     {
-        if(canMove) {
+        if(canMove && !isStatic) {
             gameObject.transform.position += new Vector3(moveSpeed * Time.deltaTime, 0, 0);
+            //Debug.Log(moveSpeed);
         }
         
     }
-    public void HandDiew()
+    public void HandDie()
     {
         animator.SetBool("die", true);
+        handmove.GetComponent<Animator>().SetBool("Play2", true);
     }
 }

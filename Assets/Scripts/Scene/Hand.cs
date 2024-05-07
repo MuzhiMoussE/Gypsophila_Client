@@ -12,6 +12,7 @@ public class Hand : MonoBehaviour
     private Animator animator;
     public bool canMove = false;
     [SerializeField] private GameObject handmove;
+    private AudioSource audioSource;
     // Start is called before the first frame update
     void OnEnable()
     {
@@ -77,6 +78,8 @@ public class Hand : MonoBehaviour
     public void HandDie()
     {
         animator.SetBool("die", true);
+        audioSource = GetComponent<AudioSource>();
+        audioSource.Play();
         handmove.GetComponent<Animator>().SetBool("Play2", true);
     }
 }

@@ -75,6 +75,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             {
                 //Debug.Log("NOT LONG PRESS!");
                 ShortPressFunction(sketchman, player);
+                recordSlider.gameObject.SetActive(false);
             }
             else if(timer < recordTime)
             {
@@ -274,10 +275,12 @@ public class StateSystem : SingletonMonoBase<StateSystem>
             //Debug.Log("LONG PRESS!");
             if (timer >= recordTime)//开启记录
             {
+                recordSlider.gameObject.SetActive(false);
                 Recording();
             }
             else//未开启，进度条++
             {
+                recordSlider.gameObject.SetActive(true);
                 recordSlider.value = timer / recordTime;
             }
         }

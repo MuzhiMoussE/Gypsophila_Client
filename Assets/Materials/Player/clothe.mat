@@ -57,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OutlineNoiseFB:
-        m_Texture: {fileID: 2800000, guid: 83a2949579c19014ab9e1afb814a57ec, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 0.39, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -77,8 +77,8 @@ Material:
     - _Mode: 0
     - _NoiseSize: 14.5
     - _OcclusionStrength: 1
-    - _OutlineWidth0: 6
-    - _OutlineWidth1: 1.5
+    - _OutlineWidth0: 3
+    - _OutlineWidth1: 3.5
     - _Parallax: 0.02
     - _RimRate: 0
     - _SmoothnessTextureChannel: 0

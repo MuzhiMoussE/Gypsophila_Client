@@ -13,6 +13,8 @@ public class Sketch: MonoBehaviour
 {
     public Button button;
     public Slider slider;
+    public Texture2D icon_normal;
+    public Texture2D icon_paint;
     private Texture2D screenShot;
     private float speed = 100;
     private LineRenderer line;
@@ -25,6 +27,8 @@ public class Sketch: MonoBehaviour
     private byte[] buffer;
     private bool startPainting = false;
     // Use this for initialization
+    private bool inPlane = false;
+    private bool canChange = true;
     public void Init()
     {
         slider.value = 0.1f;
@@ -34,6 +38,7 @@ public class Sketch: MonoBehaviour
         endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9999);
         socket.Connect(endPoint);
         startPainting = true;
+        canChange = true;
     }
     // Update is called once per frame
     void Update()
@@ -42,8 +47,13 @@ public class Sketch: MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit) && canChange)
             {
+                if(!inPlane && canChange)
+                {
+                    Cursor.SetCursor(icon_paint, Vector2.zero, CursorMode.Auto);
+                    inPlane = true;
+                }
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (c == null)
@@ -66,6 +76,14 @@ public class Sketch: MonoBehaviour
 
                 }
             }
+            else
+            {
+                if(inPlane && canChange)
+                {
+                    inPlane = false;
+                    Cursor.SetCursor(icon_normal, Vector2.zero, CursorMode.Auto);
+                }
+            }
         }
         if(SketchReceiver.Instance.startLoading)
         {
@@ -74,6 +92,8 @@ public class Sketch: MonoBehaviour
     }
     public void FinishDrawing()
     {
+        Cursor.SetCursor(icon_normal, Vector2.zero, CursorMode.Auto);
+        canChange = false;
         StartCoroutine(FinishScreenShot());
     }
     IEnumerator FinishScreenShot()

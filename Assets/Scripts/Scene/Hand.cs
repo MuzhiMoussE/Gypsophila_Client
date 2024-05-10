@@ -79,7 +79,7 @@ public class Hand : MonoBehaviour
     {
         animator.SetBool("die", true);
         audioSource = GetComponent<AudioSource>();
-        audioSource.Play();
+        audioSource.PlayOneShot(audioSource.clip);
         handmove.GetComponent<Animator>().SetBool("Play2", true);
     }
 }

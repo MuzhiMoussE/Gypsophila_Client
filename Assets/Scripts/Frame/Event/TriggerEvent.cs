@@ -94,4 +94,12 @@ public class TriggerEvent : MonoBehaviour
     {
         Destroy(triggerObj);
     }
+    public void ChangeGravity()
+    {
+        triggerObj.GetComponent<Rigidbody>().drag = 5.0f;
+    }
+    public void ResetGravity()
+    {
+        triggerObj.GetComponent<Rigidbody>().drag = 0;
+    }
 }

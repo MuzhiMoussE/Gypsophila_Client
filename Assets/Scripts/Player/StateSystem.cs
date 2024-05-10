@@ -17,6 +17,7 @@ using static Global;
 
 public class StateSystem : SingletonMonoBase<StateSystem>
 {
+    public float deadHeight;
     public bool canInput = true;
     public Global.PlayerState playerState = Global.PlayerState.Idle;
     public Slider recordSlider;
@@ -459,7 +460,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     }
     public void CheckDead(GameObject player)
     {
-         if(player.transform.position.y < -30 && !isDead)
+         if(player.transform.position.y < deadHeight && !isDead)
          {
             DeadEvent(player);
          }

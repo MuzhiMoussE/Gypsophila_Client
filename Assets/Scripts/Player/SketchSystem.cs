@@ -34,7 +34,7 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
         }
 
     }
-
+    public bool canMove = true;
     private List<KeyPair> movingLeft = new List<KeyPair>();
     private List<KeyPair> movingRight = new List<KeyPair>();
     private List<KeyPair> jumping = new List<KeyPair>() ;
@@ -172,7 +172,7 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
     public void CopyActionToSkecthMan(GameObject sketchman)//update中使用
     {
         if (!canRelease) return;
-        else
+        else if(canMove)
         {
             sketchman.transform.position += new Vector3(direction * Time.fixedDeltaTime * StateSystem.Instance.moveSpeed, 0, 0);
             //Debug.Log("释放！");
@@ -267,7 +267,13 @@ public class SketchSystem:SingletonMonoBase<SketchSystem>
         QuickSortByStartTime(list, low, j - 1);//递归调用左半数组
         QuickSortByStartTime(list, j + 1, high);//递归调用右半数组
     }
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == ItemTag.TRAP)
+        {
+            canMove = false;
+        }
+    }
 
 
 }

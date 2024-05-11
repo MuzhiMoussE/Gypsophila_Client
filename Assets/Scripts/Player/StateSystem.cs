@@ -26,6 +26,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
     public bool showTips;
     public float recordingTime = 10f;//记录存取时间
     public float moveSpeed = 6f;
+    private float nowSpeed;
     public float jumpForce;
     private float jumpMaxTime = 0.2f;
     private float jumpTime = 0;
@@ -365,15 +366,15 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         if (!getBox)
         {
             playerState = Global.PlayerState.Moving;
-            moveSpeed = 4f;
+            nowSpeed = moveSpeed;
         }
         else
         {
             playerState = Global.PlayerState.Dragging;
-            moveSpeed = 2f;
+            nowSpeed = moveSpeed - 2f;
         }
         AnimSystem.Instance.ChangeAnimState(playerState);
-        player.transform.position -= new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
+        player.transform.position -= new Vector3(nowSpeed * Time.fixedDeltaTime, 0, 0);
         PlayerRotate(player);
     }
     private void MoveRightFunction(GameObject player)
@@ -382,15 +383,15 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         if(!getBox)
         {
             playerState = Global.PlayerState.Moving;
-            moveSpeed = 4f;
+            nowSpeed = moveSpeed;
         }
         else
         {
             playerState = Global.PlayerState.Dragging;
-            moveSpeed = 2f; 
+            nowSpeed = moveSpeed/2;
         }
         AnimSystem.Instance.ChangeAnimState(playerState);
-        player.transform.position += new Vector3(moveSpeed * Time.fixedDeltaTime, 0, 0);
+        player.transform.position += new Vector3(nowSpeed * Time.fixedDeltaTime, 0, 0);
         PlayerRotate(player);
     }
     private void JumpFunction(GameObject player)

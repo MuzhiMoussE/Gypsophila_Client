@@ -7,6 +7,7 @@ public class ObjectTriggerEvent : MonoBehaviour
 {
     public bool untrigger = true;
     public UnityEvent _event;
+    public UnityEvent _exitevent;
     public bool canDisappear = false;
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,20 @@ public class ObjectTriggerEvent : MonoBehaviour
 
         }
         
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == Global.ItemTag.PLAYER)
+        {
+            if(_exitevent != null)
+            {
+                _exitevent.Invoke();
+                untrigger = true;
+            }
+            
+            if (canDisappear) StartCoroutine(triggerDisappear());
+
+        }
     }
     IEnumerator triggerDisappear()
     {

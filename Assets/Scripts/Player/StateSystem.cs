@@ -371,7 +371,7 @@ public class StateSystem : SingletonMonoBase<StateSystem>
         else
         {
             playerState = Global.PlayerState.Dragging;
-            nowSpeed = moveSpeed - 2f;
+            nowSpeed = moveSpeed/2;
         }
         AnimSystem.Instance.ChangeAnimState(playerState);
         player.transform.position -= new Vector3(nowSpeed * Time.fixedDeltaTime, 0, 0);

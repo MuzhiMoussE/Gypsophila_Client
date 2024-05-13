@@ -77,8 +77,8 @@ Material:
     - _Mode: 0
     - _NoiseSize: 9
     - _OcclusionStrength: 1
-    - _OutlineWidth0: 9.2
-    - _OutlineWidth1: 6.3
+    - _OutlineWidth0: 5.7
+    - _OutlineWidth1: 0
     - _Parallax: 0.02
     - _RimRate: 5
     - _SmoothnessTextureChannel: 0

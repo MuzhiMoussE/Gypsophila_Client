@@ -11,6 +11,11 @@ public class UpLevel : MonoBehaviour
     {
         player.transform.parent = transform;
     }
+    public void PlayerMoveExitLevel()
+    {
+        player.transform.parent = null;
+        player.transform.position += new Vector3(0, 1, 0);
+    }
     public void PlayerMove()
     {
         if(onlyOnce)

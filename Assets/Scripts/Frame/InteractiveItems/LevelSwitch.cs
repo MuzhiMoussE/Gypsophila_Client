@@ -15,6 +15,7 @@ public class LevelSwitch : InteractiveItems
     private float downDistance = 0.4f;
     private AudioSource audioSource;
     public UnityEvent _event;
+    public UnityEvent _offevent;
     private void OnTriggerEnter(Collider other)
     {
         if (finishLevel) return;
@@ -78,6 +79,10 @@ public class LevelSwitch : InteractiveItems
         gameObject.transform.position += new Vector3(0, downDistance, 0);
         state = ItemState.Off;
         EventCenter.Broadcast(GameEvent.ItemStateChangeEvent);
+        if (_event != null)
+        {
+            _offevent.Invoke();
+        }
     }
     public void LevelFinishState()
     {

@@ -48,7 +48,7 @@ public class ObjectTriggerEvent : MonoBehaviour
     }
     IEnumerator triggerDisappear()
     {
-        yield return new WaitForSeconds(3);
-        gameObject.SetActive(false);
+        yield return new WaitForSeconds(1);
+        gameObject.GetComponent<TriggerEvent>().enabled = false;
     }
 }

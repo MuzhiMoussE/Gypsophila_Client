@@ -13,6 +13,7 @@ public class Hand : MonoBehaviour
     public bool canMove = false;
     [SerializeField] private GameObject handmove;
     private AudioSource audioSource;
+    public ParticleSystem particle;
     // Start is called before the first frame update
     void OnEnable()
     {
@@ -80,6 +81,7 @@ public class Hand : MonoBehaviour
         animator.SetBool("die", true);
         audioSource = GetComponent<AudioSource>();
         audioSource.PlayOneShot(audioSource.clip);
+        particle.Play();
         handmove.GetComponent<Animator>().SetBool("Play2", true);
     }
 }
